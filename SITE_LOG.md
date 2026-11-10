@@ -8,7 +8,8 @@ Built from the plan in `16_Personal_Website_Plan_and_Master_Prompt.md`.
 
 - Astro 7 static site, GitHub Pages through Actions, Pages CMS for editing. No third-party CDN at run time (fonts self-hosted), so the site loads in mainland China.
 - This repository is the user site, served at the root `https://syednafizreja.github.io/`. The canopy prototype stays a project site at `/parametric-canopy-carbon-optimization/`, served from its own repository. GitHub serves project sites under the user domain, so both work; this repository must never contain a top-level folder or route with that name.
-- three.js loads only on pages with the shell viewer. Other pages ship well under 50 KB of JavaScript.
+- three.js loads only when a reader presses "Rotate in 3D" on the viewer; until then the page shows a still render of the same model. Loading it on scroll cost about 0.8 s of blocking time on mobile and captured touch scrolling. Pages ship about 2 KB of JavaScript before that.
+- Newsreader uses the weight-only variable files (58 KB instead of 132 KB per style), and the 6 KB stylesheet is inlined, which removes the only render-blocking request.
 - The viewer shows one real ShellForm design cell (`tools/extract_shellform_cell.py`). In that cell no node drops (height change 0 to 349 mm), and the caption says so. A still render is the fallback without WebGL.
 - The former employer is not named; the CV page says "precision manufacturing" and omits process details.
 - References on the CV page read "Available on request". No phone numbers or street addresses anywhere.
@@ -21,7 +22,9 @@ Built from the plan in `16_Personal_Website_Plan_and_Master_Prompt.md`.
 
 - `astro check`: 0 errors, 0 warnings, 0 hints.
 - Internal links (linkinator): all OK.
-- Playwright and axe (WCAG 2.1 A and AA) on 10 pages in light and dark themes, plus behaviour tests: all pass.
+- Playwright and axe (WCAG 2.1 A and AA) on 10 pages in light and dark themes, plus behaviour tests: all 27 pass.
+- Lighthouse 12 (mobile, simulated throttling), live site, 10 Nov 2026: performance 100 on `/`, `/work/shellform/` and `/cv/`, 95 on `/publications/`. Accessibility, best practices and SEO scored 100 on the pages checked before the viewer change.
+- External links: both Zenodo DOIs return 403 to link checkers (Zenodo blocks bots); the DOI handle API confirms both are registered.
 
 ### Checked by Claude, author to confirm
 
