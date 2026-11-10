@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /og/
 
 Sitemap: https://syednafizreja.github.io/sitemap-index.xml
