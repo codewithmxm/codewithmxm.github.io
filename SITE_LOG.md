@@ -41,4 +41,4 @@ Built from the plan in `16_Personal_Website_Plan_and_Master_Prompt.md`.
 
 - Install the Pages CMS GitHub app on this repository (https://app.pagescms.org) to use the dashboard.
 - Two projects from the plan are not on the site yet: stress-trajectory ribs and diaphragm flexibility. Add them when there is material to show.
-- Add `https://syednafizreja.github.io` to the CV PDF source, LinkedIn and ORCID.
+- Add `https://syednafizreja.github.io` to the CV PDF source, LinkedIn and ORCID. The repository homepage is set. The GitHub profile website field is not: the CLI token lacks the `user` scope. Set it at github.com/settings/profile, or run `gh auth refresh -h github.com -s user` once and ask Claude again.
