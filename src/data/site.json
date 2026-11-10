@@ -1,0 +1,18 @@
+{
+  "name": "Syed Nafiz Reja Hasib",
+  "short_name": "Syed Nafiz Reja Hasib",
+  "job_title": "Civil and structural engineer",
+  "identity": "Computational design of efficient shell and structural systems under seismic loading, with embodied carbon as a primary design variable.",
+  "bio": "I design lightweight concrete shell structures that stay safe in earthquakes and use far less material and carbon, using computation and open, tested code.",
+  "currently": "Applying for funded MSc and PhD positions starting September 2027.",
+  "location": "Guangdong, China",
+  "email_user": "syednafiz2811",
+  "email_domain": "gmail.com",
+  "orcid": "0009-0002-7162-7890",
+  "github": "syednafizreja",
+  "linkedin": "https://www.linkedin.com/in/syednafizreja",
+  "researchgate": "https://www.researchgate.net/profile/Syed-Nafiz-Reja-Hasib",
+  "cv_pdf": "/cv/CV_Syed_Nafiz_Reja_Hasib.pdf",
+  "featured": ["shellbench", "shellform", "canopy"],
+  "accent": "oxide"
+}

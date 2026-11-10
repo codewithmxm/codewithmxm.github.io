@@ -1,0 +1,85 @@
+---
+number: "001"
+title: "ShellBench: whole-building embodied carbon of thin-shell floors in seismic RC frames"
+short_title: "ShellBench"
+year: "2026–"
+sort_date: 2026-10-01
+status: in-progress
+summary: "How much do thin-shell floors cut the A1–A3 embodied carbon of GB 50010 / GB 50011 reinforced concrete frames across 3–8 storeys, and how does the saving change with storey count and seismic intensity once diaphragm, tie and topping needs are met?"
+methods: [seismic-analysis, embodied-carbon, form-finding, finite-element, validation, machine-learning]
+tools: [Python, OpenSeesPy, CalculiX, Gmsh, pytest, GitHub Actions]
+hero:
+  src: ../../assets/media/shellbench/anchor_waterfall.png
+  alt: "Waterfall chart of A1–A3 embodied carbon per square metre of floor for the anchor building, stepping from the slab floor to the shell floor element by element, with the whole-building saving."
+  caption: "Anchor building (4 storeys, 0.10 g): each step of A1–A3 carbon from slab floor to shell floor, kgCO₂e per m² of floor. Pre-release, screening-level; footings out of scope. Source: results/anchor_waterfall.csv."
+gallery:
+  - src: ../../assets/media/shellbench/benchmarks_convergence.png
+    alt: "Convergence plot of computed over reference displacement against mesh density for the Scordelis–Lo roof and pinched hemisphere benchmarks, with a 2 per cent band."
+    caption: "Shell benchmarks in CalculiX (S8R): computed over reference displacement against mesh density, with the 2 % band. Source: results/benchmarks_convergence.csv."
+  - src: ../../assets/media/shellbench/anchor_seismic_compare.png
+    alt: "Two panels by storey: storey shear and inter-storey drift from the base-shear method, response spectrum analysis and the thesis table."
+    caption: "(a) Storey shear and (b) inter-storey drift by storey: base-shear method, response spectrum (3 modes, SRSS) and thesis Table 8-12. Source: results/anchor_rsa.csv."
+key_numbers:
+  - label: "Floor carbon, slab → shell"
+    value: "57.6 → 47.4"
+    unit: "kgCO₂e/m²"
+    basis: "Anchor building; floor saving S_f = 17.8 %"
+  - label: "Whole building, slab → shell"
+    value: "102.1 → 95.7"
+    unit: "kgCO₂e/m²"
+    basis: "Anchor building; whole-building saving S_b = 6.2 %"
+  - label: "Shell family"
+    value: "5,184"
+    unit: "designs"
+    basis: "36 buildings × 36 floor variants × 4 toppings; 4,856 ok, 288 outside the code, 40 failed"
+  - label: "Automated tests"
+    value: "238"
+    unit: "passed"
+    basis: "pytest, 10 Nov 2026, on every change via GitHub Actions"
+numbers_note: "Pre-release numbers as of 10 November 2026. Hypotheses H1–H4 are judged once, on the published dataset."
+validation:
+  benchmark: "Scordelis–Lo roof and pinched hemisphere (CalculiX S8R); the author's own thesis frame as validation case 0"
+  metric: "Computed / reference displacement"
+  value: "0.9984 and 0.9965 (within 0.4 %)"
+evidence:
+  repo: https://github.com/syednafizreja/ShellBench
+  tag: v0.3.0
+  doi: 10.5281/zenodo.23851675
+  tests: "238 passed (pytest, 10 Nov 2026)"
+  licence: MIT
+related: [shellform, thesis-rc-frame]
+---
+
+## Question
+
+A thinner floor weighs less. Less weight means smaller seismic forces, which can mean smaller beams, columns and footings. ShellBench follows that chain through the whole building, using real design codes, rather than comparing floors on their own.
+
+The question: how much do thin-shell floors cut the whole-building A1–A3 embodied carbon of a GB 50010 / GB 50011 reinforced concrete frame across 3–8 storeys, and how does the saving change with storey count and seismic intensity once diaphragm, tie and topping needs are met?
+
+## Approach
+
+The study is checked against one real, fully documented building: my own bachelor thesis design. That building is validation case 0, and every model must reproduce it before it is trusted on anything else.
+
+1. **Audit.** I logged 16 input inconsistencies and 21 doubtful printed values in the thesis, each with a recorded decision, and typed eight thesis result tables in as validation targets.
+2. **Anchor model.** The thesis frame rebuilt in OpenSeesPy under gravity, wind and earthquake (GB 50011 base-shear method and a 3D response-spectrum check), with GB 50010 member checks, take-off and A1–A3 carbon. Every difference above 10 % from the thesis has a written reason. Released as v0.1.0.
+3. **Generator.** Designs a frame to written design rules, including capacity design, for a family of 36 buildings: 3–8 storeys × six peak ground accelerations (0.05–0.40 g). Failures are counted, not dropped.
+4. **Shell floor module.** Force-density form-finding and CalculiX shell analysis; a floor library of 72 cases; a diaphragm test (in-plane deflection ≤ 2 × storey drift) and a topping rule.
+5. **Pre-registration.** Hypotheses H1–H4 and the analysis plan were fixed on 3 November 2026, before any family result existed.
+6. **Surrogate (Paper 2).** A machine-learning surrogate with split-conformal intervals, frozen before evaluation.
+
+## Validation
+
+The shell solver reproduces two standard benchmarks within 0.4 %: the Scordelis–Lo roof (0.9984 of the reference displacement) and the pinched hemisphere (0.9965). The anchor frame reproduces the thesis storey shears and drifts; each difference above 10 % is explained in the anchor report.
+
+## Results
+
+For the anchor building (4 storeys, 0.10 g), floor carbon falls from 57.6 to 47.4 kgCO₂e/m² (17.8 %), and whole-building carbon from 102.1 to 95.7 kgCO₂e/m² (6.2 %). In the shell family run, every successful design passes the diaphragm test with no topping needed (worst ratio 0.0113).
+
+The surrogate, tested on unseen storey counts, reached conformal coverage of 0.733 against a target of 0.88–0.92, and its decision agreement (93.9 %) was below the 97.0 % of simply always choosing the shell. These are reported as found.
+
+## What this does not show
+
+- All family and surrogate numbers are **pre-release**; the hypothesis verdicts are run once on the published dataset.
+- Carbon is cradle-to-gate (A1–A3) only, and footings are outside the scope of the anchor comparison.
+- The design rules follow the Chinese codes (GB 50010, GB 50011); other codes would change member sizes.
+- Floors are compared at screening level; construction, formwork and long-term behaviour are not modelled.
