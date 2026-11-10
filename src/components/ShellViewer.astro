@@ -1,7 +1,8 @@
 ---
 /* Signature viewer: one ShellForm design cell, the seismic-aware form coloured by its
-   height change from the gravity-only form. three.js loads only when the viewer is
-   on screen; without WebGL, or with reduced motion, the static image stays. */
+   height change from the gravity-only form. The page shows a still render of the same
+   model; three.js loads only when the reader asks for the 3D view, so it costs nothing
+   on page load and never captures touch scrolling uninvited. Without WebGL the still stays. */
 import { getImage } from 'astro:assets';
 import fallback from '../assets/media/shellform/viewer-fallback.png';
 import cell from '../assets/models/shellform-cell.json';
@@ -14,7 +15,7 @@ const lim = Math.round(cell.dz_limit_mm);
   <div class="viewer" data-viewer data-ready="false">
     <img class="fallback" src={img.src} width="1600" height="1000" alt={`Thin concrete shell on four corner supports, ${cell.span_m} m span, coloured by how much the seismic-aware form rises or drops relative to the gravity-only form; the largest change is about ${lim} millimetres.`} loading="lazy" decoding="async" />
     <div class="controls no-print">
-      <button type="button" data-load hidden>Load 3D view</button>
+      <button type="button" class="load" data-load hidden>Rotate in 3D</button>
       <button type="button" data-reset hidden>Reset view</button>
     </div>
     <span class="hint no-print" data-hint hidden>Drag to orbit · scroll or pinch to zoom</span>
@@ -42,20 +43,15 @@ const lim = Math.round(cell.dz_limit_mm);
         return false;
       }
     })();
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const start = () => import('./viewer').then((m) => m.mount(host)).catch(() => (host.dataset.ready = 'false'));
+    const start = () =>
+      import('./viewer')
+        .then((m) => { m.mount(host); host.querySelector<HTMLButtonElement>('[data-reset]')?.focus({ preventScroll: true }); })
+        .catch(() => (host.dataset.ready = 'false'));
 
     if (gl) {
-      if (reduced) {
-        const btn = host.querySelector<HTMLButtonElement>('[data-load]')!;
-        btn.hidden = false;
-        btn.addEventListener('click', () => { btn.hidden = true; start(); }, { once: true });
-      } else {
-        const io = new IntersectionObserver((entries) => {
-          if (entries.some((e) => e.isIntersecting)) { io.disconnect(); start(); }
-        }, { rootMargin: '200px' });
-        io.observe(host);
-      }
+      const btn = host.querySelector<HTMLButtonElement>('[data-load]')!;
+      btn.hidden = false;
+      btn.addEventListener('click', () => { btn.hidden = true; start(); }, { once: true });
     }
   }
 </script>

@@ -317,6 +317,9 @@
   .viewer .controls { position: absolute; right: var(--s1); top: var(--s1); display: flex; gap: 0.4rem; z-index: 2; }
   .viewer .controls button { font-family: var(--mono); font-size: 0.72rem; background: var(--paper); color: var(--ink); border: 1px solid var(--rule); padding: 0.25rem 0.55rem; border-radius: var(--radius); }
   .viewer .controls button:hover { border-color: var(--ink-3); }
+  /* the still render is light in both themes, so the button keeps one dark style */
+  .viewer .controls .load { font-size: 0.8rem; padding: 0.4rem 0.8rem; background: #1c1a16; color: #f4f0e6; border-color: #1c1a16; }
+  .viewer .controls .load:hover { background: #8f3517; border-color: #8f3517; }
   .viewer .hint { position: absolute; left: var(--s1); bottom: var(--s1); font-family: var(--mono); font-size: 0.7rem; color: var(--ink-3); background: color-mix(in srgb, var(--paper) 85%, transparent); padding: 0.15rem 0.4rem; }
   .legend { display: grid; grid-template-columns: auto 1fr auto; gap: 0.6rem; align-items: center; margin-top: var(--s1); font-family: var(--mono); font-size: 0.74rem; color: var(--ink-2); }
   .legend .bar { height: 0.55rem; background: linear-gradient(90deg, #2166ac, #67a9cf, #d1e5f0, #f7f7f7, #fddbc7, #ef8a62, #b2182b); border: 1px solid var(--rule); }

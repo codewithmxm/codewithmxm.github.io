@@ -66,3 +66,12 @@ test('back-to-top control appears after scrolling and returns to the top', async
   await btn.click();
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(5);
 });
+
+test('3D view loads only on request', async ({ page }) => {
+  await page.goto('/');
+  const host = page.locator('[data-viewer]').first();
+  await expect(host.locator('canvas')).toHaveCount(0);
+  await host.locator('[data-load]').click();
+  await expect(host).toHaveAttribute('data-ready', 'true', { timeout: 20000 });
+  await expect(host.locator('[data-reset]')).toBeFocused();
+});

@@ -12,6 +12,7 @@ const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--ena
   await page.goto(`${base}/work/shellform/`, { waitUntil: 'networkidle' });
   const host = page.locator('[data-viewer]').first();
   await host.scrollIntoViewIfNeeded();
+  await host.locator('[data-load]').click();
   await page.waitForSelector('[data-viewer] canvas', { timeout: 20000 }).catch(() => console.log('no canvas'));
   await page.waitForTimeout(1500);
   await page.addStyleTag({ content: '.viewer .controls, .viewer [data-hint] { display: none !important; } .viewer { border: 0 !important; }' });
