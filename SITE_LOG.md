@@ -29,12 +29,16 @@ Built from the plan in `16_Personal_Website_Plan_and_Master_Prompt.md`.
 ### Checked by Claude, author to confirm
 
 - All CV facts on `/about/` and `/cv/` were copied from `CV_Syed_Nafiz_Reja_Hasib.pdf` (Nov 2026).
-- Publication [5] (PaveCarbon paper) is shown as "in preparation, submission planned November 2026", as in the CV. Update when submitted.
+- Publication [5] (PaveCarbon paper) is shown as "in preparation, submission planned November 2026", as in the CV. Confirmed by the author on 10 Nov 2026 ("approve all"). Update when submitted.
 - ShellBench test count: the CV says 114, the repository reported 238 passed on 10 Nov 2026. The CV page gives no count; the project page uses the repository figure.
+
+### Headshot (10 Nov 2026)
+
+- The author supplied a portrait in `_inbox/`. It was cropped to 4:5 head and shoulders, EXIF stripped, saved as `src/assets/media/portrait.jpg`, and shown on `/about/` (AVIF and WebP, 320 and 640 px). A 640 px JPEG is the `image` in the Person JSON-LD.
+- Playwright now serves on `127.0.0.1` with `--force`: the local sandbox refused connections to `astro preview` on `localhost`.
 
 ### TODO(syed)
 
 - Install the Pages CMS GitHub app on this repository (https://app.pagescms.org) to use the dashboard.
-- Add a headshot if wanted (none was taken from local folders on purpose). Place it in `src/assets/media/` and add it to the About page.
 - Two projects from the plan are not on the site yet: stress-trajectory ribs and diaphragm flexibility. Add them when there is material to show.
-- Add `https://syednafizreja.github.io` to the CV PDF source, LinkedIn, ORCID and the GitHub profile.
+- Add `https://syednafizreja.github.io` to the CV PDF source, LinkedIn and ORCID.

@@ -326,6 +326,7 @@
   .legend .mid { grid-column: 2; text-align: center; margin-top: -0.3rem; }
 
   /* home specifics */
+  .panel .portrait { display: block; width: 100%; max-width: 20rem; height: auto; aspect-ratio: 4 / 5; object-fit: cover; margin-bottom: var(--s3); border: 1px solid var(--rule); }
   .feature { display: grid; gap: var(--s4); align-items: start; }
   @media (min-width: 60rem) { .feature { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); } }
   .section-head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s2); margin-bottom: var(--s3); flex-wrap: wrap; }

@@ -50,6 +50,10 @@ npm run build
 
 Commit the new files in `public/`.
 
+## Portrait
+
+The About page photo is `src/assets/media/portrait.jpg` (4:5, 1200 × 1500 px). To change it, replace that file with a new 4:5 JPEG of the same name, with location data removed. The build makes the smaller AVIF and WebP copies.
+
 ## Local preview
 
 ```sh

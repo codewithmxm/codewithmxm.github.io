@@ -2,7 +2,9 @@
 import { getEntry, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Email from '../components/Email.astro';
+import { Picture } from 'astro:assets';
 import { site, links } from '../lib/site';
+import portrait from '../assets/media/portrait.jpg';
 
 const entry = (await getEntry('pages', 'about'))!;
 const { Content } = await render(entry);
@@ -19,6 +21,7 @@ const { Content } = await render(entry);
     <div class="feature">
       <div class="prose"><Content /></div>
       <aside class="panel" aria-label="Facts">
+        <Picture class="portrait" src={portrait} formats={['avif', 'webp']} widths={[320, 640]} sizes="(min-width: 60rem) 20rem, 90vw" alt={`Portrait of ${site.name}`} loading="eager" />
         <dl>
           <dt>Now</dt><dd>{site.currently}</dd>
           <dt>Education</dt><dd>BEng Civil Engineering, Southwest Petroleum University, Chengdu (2019–2023). Weighted average 84.05/100; full Chinese Government Scholarship.</dd>
