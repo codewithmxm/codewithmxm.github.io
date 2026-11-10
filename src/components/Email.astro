@@ -1,0 +1,11 @@
+---
+/* The address never appears in the HTML as one string. JS assembles a mailto link;
+   without JS the reader sees "user [at] domain". */
+import { site } from '../lib/site';
+interface Props { label?: string }
+const { label } = Astro.props;
+---
+
+<span class="email" data-u={site.email_user} data-d={site.email_domain} data-label={label}
+  >{site.email_user} [at] {site.email_domain}</span
+>

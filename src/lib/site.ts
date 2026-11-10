@@ -1,0 +1,46 @@
+import { z } from 'astro/zod';
+import raw from '../data/site.json';
+
+const Site = z.object({
+  name: z.string(),
+  short_name: z.string(),
+  job_title: z.string(),
+  identity: z.string(),
+  bio: z.string(),
+  currently: z.string(),
+  location: z.string(),
+  email_user: z.string(),
+  email_domain: z.string(),
+  orcid: z.string().regex(/^\d{4}-\d{4}-\d{4}-\d{3}[\dX]$/),
+  github: z.string(),
+  linkedin: z.url(),
+  researchgate: z.url(),
+  cv_pdf: z.string(),
+  featured: z.array(z.string()).max(3),
+  accent: z.enum(['oxide', 'cobalt', 'moss']),
+});
+
+/** Site settings, validated at build time. Edited through Pages CMS ("Site settings"). */
+export const site = Site.parse(raw);
+
+export const links = {
+  orcid: `https://orcid.org/${site.orcid}`,
+  github: `https://github.com/${site.github}`,
+  linkedin: site.linkedin,
+  researchgate: site.researchgate,
+};
+
+export const STATUS_LABEL = {
+  'in-progress': 'In progress',
+  complete: 'Complete',
+  archived: 'Archived',
+} as const;
+
+export const PUB_STATUS_LABEL = {
+  published: 'Published',
+  'under-review': 'Under review',
+  'in-preparation': 'In preparation',
+  preprint: 'Preprint / report',
+} as const;
+
+export const doiUrl = (doi: string) => `https://doi.org/${doi}`;

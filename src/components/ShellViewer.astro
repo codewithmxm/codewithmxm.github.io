@@ -1,0 +1,61 @@
+---
+/* Signature viewer: one ShellForm design cell, the seismic-aware form coloured by its
+   height change from the gravity-only form. three.js loads only when the viewer is
+   on screen; without WebGL, or with reduced motion, the static image stays. */
+import { getImage } from 'astro:assets';
+import fallback from '../assets/media/shellform/viewer-fallback.png';
+import cell from '../assets/models/shellform-cell.json';
+
+const img = await getImage({ src: fallback, width: 1600, format: 'webp' });
+const lim = Math.round(cell.dz_limit_mm);
+---
+
+<figure class="fig shell-viewer">
+  <div class="viewer" data-viewer data-ready="false">
+    <img class="fallback" src={img.src} width="1600" height="1000" alt={`Thin concrete shell on four corner supports, ${cell.span_m} m span, coloured by how much the seismic-aware form rises or drops relative to the gravity-only form; the largest change is about ${lim} millimetres.`} loading="lazy" decoding="async" />
+    <div class="controls no-print">
+      <button type="button" data-load hidden>Load 3D view</button>
+      <button type="button" data-reset hidden>Reset view</button>
+    </div>
+    <span class="hint no-print" data-hint hidden>Drag to orbit · scroll or pinch to zoom</span>
+  </div>
+  <div class="legend" aria-hidden="true">
+    <span>−{lim} mm</span><span class="bar"></span><span>+{lim} mm</span>
+  </div>
+  <figcaption>
+    <span class="label">ShellForm · {cell.id.replace('-seismic-sa0.6', '')}</span>
+    Seismic-aware form at S<sub>a</sub> = {cell.sa_g} g, coloured by height change from the gravity-only form (blue lower,
+    red higher; scale ±{lim} mm; in this cell no node drops). {cell.span_m} m span, corner supports, rise/span {cell.rise_ratio}. Both forms size to the
+    same {cell.thickness_mm.seismic} mm thickness, set by buckling; carbon {cell.carbon_kgco2e_m2.gravity} vs {cell.carbon_kgco2e_m2.seismic} kgCO₂e/m².
+    The form moves; the carbon barely does. Data: ShellForm v0.1.0, tag {cell.freeze_tag}, on ShellBench {cell.shellbench_tag}.
+  </figcaption>
+</figure>
+
+<script>
+  const host = document.querySelector<HTMLElement>('[data-viewer]');
+  if (host) {
+    const gl = (() => {
+      try {
+        const c = document.createElement('canvas');
+        return !!(c.getContext('webgl2') || c.getContext('webgl'));
+      } catch {
+        return false;
+      }
+    })();
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const start = () => import('./viewer').then((m) => m.mount(host)).catch(() => (host.dataset.ready = 'false'));
+
+    if (gl) {
+      if (reduced) {
+        const btn = host.querySelector<HTMLButtonElement>('[data-load]')!;
+        btn.hidden = false;
+        btn.addEventListener('click', () => { btn.hidden = true; start(); }, { once: true });
+      } else {
+        const io = new IntersectionObserver((entries) => {
+          if (entries.some((e) => e.isIntersecting)) { io.disconnect(); start(); }
+        }, { rootMargin: '200px' });
+        io.observe(host);
+      }
+    }
+  }
+</script>

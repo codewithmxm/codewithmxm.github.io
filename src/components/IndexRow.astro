@@ -1,0 +1,32 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import { METHOD_LABELS } from '../lib/methods';
+import { STATUS_LABEL } from '../lib/site';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  thumb?: boolean;
+  headingLevel?: 'h2' | 'h3';
+}
+const { project, thumb = true, headingLevel = 'h3' } = Astro.props;
+const d = project.data;
+const H = headingLevel;
+---
+
+<li class="index-row" data-methods={d.methods.join(' ')}>
+  <a href={`/work/${project.id}/`}>
+    <span class="n" aria-hidden="true">{d.number}</span>
+    <H><span class="sr-only">{d.number}. </span>{d.short_title}</H>
+    <span class="yr">{d.year}<br /><span class={`status ${d.status}`}>{STATUS_LABEL[d.status]}</span></span>
+    {
+      thumb && (
+        <span class="thumb" aria-hidden="true">
+          <Image src={d.hero.src} alt="" width={416} quality={70} loading="lazy" decoding="async" />
+        </span>
+      )
+    }
+    <p class="summary">{d.summary}</p>
+    <span class="tags">{d.methods.map((m) => <span class="tag">{METHOD_LABELS[m]}</span>)}</span>
+  </a>
+</li>

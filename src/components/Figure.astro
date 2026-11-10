@@ -1,0 +1,40 @@
+---
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  caption?: string;
+  label?: string;
+  eager?: boolean;
+  sizes?: string;
+}
+const { src, alt, caption, label, eager = false, sizes = '(min-width: 76rem) 52rem, 92vw' } = Astro.props;
+const widths = [480, 800, 1200, 1600].filter((w) => w <= src.width);
+if (!widths.length) widths.push(src.width);
+---
+
+<figure class="fig">
+  <div class="frame">
+    <Picture
+      src={src}
+      alt={alt}
+      widths={widths}
+      sizes={sizes}
+      formats={['avif', 'webp']}
+      fallbackFormat="png"
+      loading={eager ? 'eager' : 'lazy'}
+      fetchpriority={eager ? 'high' : 'auto'}
+      decoding="async"
+    />
+  </div>
+  {
+    caption && (
+      <figcaption>
+        {label && <span class="label">{label}</span>}
+        {caption}
+      </figcaption>
+    )
+  }
+</figure>

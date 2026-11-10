@@ -1,0 +1,128 @@
+---
+import '@fontsource-variable/newsreader/opsz.css';
+import '@fontsource-variable/newsreader/opsz-italic.css';
+import '@fontsource-variable/inter/wght.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site, links } from '../lib/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Slug of the generated card in /og/, without extension. */
+  og?: string;
+  type?: 'website' | 'article' | 'profile';
+  noindex?: boolean;
+  /** Extra JSON-LD objects for this page. */
+  jsonLd?: Record<string, unknown>[];
+  bare?: boolean;
+}
+
+const {
+  title,
+  description = site.identity,
+  og = 'default',
+  type = 'website',
+  noindex = false,
+  jsonLd = [],
+  bare = false,
+} = Astro.props;
+
+const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.job_title}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(`/og/${og}.png`, Astro.site);
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  '@id': new URL('/#person', Astro.site).href,
+  name: site.name,
+  url: Astro.site?.href,
+  jobTitle: site.job_title,
+  description: site.identity,
+  knowsAbout: [
+    'Structural engineering',
+    'Concrete shell structures',
+    'Form-finding',
+    'Earthquake engineering',
+    'Embodied carbon',
+    'Finite element analysis',
+  ],
+  alumniOf: { '@type': 'CollegeOrUniversity', name: 'Southwest Petroleum University' },
+  address: { '@type': 'PostalAddress', addressRegion: 'Guangdong', addressCountry: 'CN' },
+  identifier: { '@type': 'PropertyValue', propertyID: 'ORCID', value: site.orcid },
+  sameAs: [links.orcid, links.github, links.linkedin, links.researchgate],
+};
+const ld = [person, ...jsonLd];
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      (() => {
+        try {
+          const saved = localStorage.getItem('theme');
+          const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.dataset.theme = saved || (dark ? 'dark' : 'light');
+        } catch (e) {
+          document.documentElement.dataset.theme = 'light';
+        }
+      })();
+    </script>
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={site.name} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="theme-color" content="#f4f0e6" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#151513" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title ?? site.name} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_GB" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(ld.length === 1 ? ld[0] : ld)} />
+    <slot name="head" />
+  </head>
+  <body>
+    {
+      bare ? (
+        <slot />
+      ) : (
+        <>
+          <a class="skip" href="#main">Skip to content</a>
+          <Header />
+          <main id="main" tabindex="-1">
+            <slot />
+          </main>
+          <Footer />
+          <button class="to-top" type="button" data-to-top hidden aria-label="Back to top" title="Back to top">
+            <svg class="ring" viewBox="0 0 36 36" aria-hidden="true"><circle class="track" cx="18" cy="18" r="15.9" /><circle class="bar" cx="18" cy="18" r="15.9" pathLength="100" /></svg>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5" /></svg>
+          </button>
+        </>
+      )
+    }
+    <script>
+      import '../scripts/site';
+    </script>
+  </body>
+</html>
