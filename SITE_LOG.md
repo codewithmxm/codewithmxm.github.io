@@ -25,7 +25,8 @@ The author asked for a more modern, technical look (reference sites: yasio.dev, 
 - Playwright and axe (WCAG 2.1 A and AA), 10 pages in both themes, plus behaviour tests: all 27 pass. The axe tests now pick the theme through `localStorage`, the way a reader does.
 - Screenshots checked at 1280 and 390 px in both themes: full pages for home, work, ShellForm case study, about, publications and CV; first screen for home, research and contact after the performance changes.
 - CV PDF regenerated (3 pages); text search for the private strings returns nothing.
-- Lighthouse 12 (mobile, simulated), local preview, which is noisy on this machine: accessibility, best practices and SEO 100 on `/` and `/work/shellform/`. Performance on `/` after the raster fixes: 77, 98, 98, 95 (median 96; the first run is a cold start). `/work/shellform/`: 100 on most runs, one run 76. The previous design scored 96 to 99 on the live site. Live numbers for the redesign are recorded below once deployed.
+- Lighthouse 12 (mobile, simulated), local preview, which is noisy on this machine: accessibility, best practices and SEO 100 on `/` and `/work/shellform/`. Performance on `/` after the raster fixes: 77, 98, 98, 95 (median 96; the first run is a cold start). `/work/shellform/`: 100 on most runs, one run 76. The previous design scored 96 to 99 on the live site. Live numbers for the redesign are in the next line.
+- Lighthouse 12 (mobile, simulated), live site after deployment, 10 Nov 2026, three runs each: `/` performance 95, 84, 98 (median 95); `/work/shellform/` 88, 100, 100 (median 100). Accessibility, best practices and SEO 100 on every run. LCP 1.0 to 1.7 s; total blocking time varied from 12 to 650 ms between runs on this machine.
 
 ## 2026-11-10: first release
 
