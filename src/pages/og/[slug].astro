@@ -1,0 +1,44 @@
+---
+// Social-card templates. scripts/og.mjs screenshots each at 1200×630 into public/og/<slug>.png.
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { site } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', (p) => !p.data.draft);
+  const pages = [
+    { slug: 'default', kicker: 'Portfolio', title: site.name, sub: site.identity },
+    { slug: 'work', kicker: 'Index', title: 'Selected work', sub: 'Numbered projects in shells, seismic design and embodied carbon, each with code, tests and limits.' },
+    { slug: 'research', kicker: 'Research statement', title: 'Shells, earthquakes and carbon', sub: site.identity },
+    { slug: 'publications', kicker: 'Publications', title: 'Publications', sub: 'Journal articles, manuscripts and technical reports, with DOIs and BibTeX.' },
+    { slug: 'about', kicker: 'About', title: site.name, sub: site.bio },
+    { slug: 'cv', kicker: 'Curriculum vitae', title: site.name, sub: 'Education, research projects, publications, experience and skills.' },
+    { slug: 'contact', kicker: 'Contact', title: 'Get in touch', sub: site.currently },
+  ].map((p) => ({ params: { slug: p.slug }, props: { ...p, n: '' } }));
+  const proj = projects.map((p) => ({
+    params: { slug: p.id },
+    props: { slug: p.id, kicker: `Project ${p.data.number}`, title: p.data.title, sub: p.data.summary, n: p.data.number },
+  }));
+  return [...pages, ...proj];
+}
+
+const { kicker, title, sub, n } = Astro.props;
+---
+
+<Base title={title} noindex bare>
+  <div class="og">
+    <div class="top"><span>{kicker}</span><span>syednafizreja.github.io</span></div>
+    <div>
+      <h1>{title}</h1>
+      <p class="sub mt-3">{sub}</p>
+    </div>
+    <div class="bottom"><span>{site.name}</span>{n && <span class="n">{n}</span>}</div>
+  </div>
+</Base>
+
+<style is:global>
+  html:has(.og) { background: var(--paper); }
+  body:has(.og) { margin: 0; }
+  .og h1 { font-size: 58px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .og .sub { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+</style>

@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+import Email from '../components/Email.astro';
+import { site, links } from '../lib/site';
+---
+
+<Base title="Contact" description={`How to contact ${site.name}: email, ORCID, GitHub, LinkedIn and ResearchGate.`} og="contact">
+  <header class="page-head wrap">
+    <span class="eyebrow">Contact</span>
+    <h1>Contact</h1>
+    <p class="lede">
+      I am {site.currently.charAt(0).toLowerCase() + site.currently.slice(1)} I am glad to hear from supervisors, research groups and engineers working
+      on shells, seismic design or low-carbon structures. Email is the best way to reach me.
+    </p>
+  </header>
+  <div class="wrap section">
+    <ul class="contact-list">
+      <li><span class="k">Email</span><span><Email /></span></li>
+      <li><span class="k">ORCID</span><a href={links.orcid} rel="me">{site.orcid}</a></li>
+      <li><span class="k">GitHub</span><a href={links.github} rel="me">github.com/{site.github}</a></li>
+      <li><span class="k">LinkedIn</span><a href={links.linkedin} rel="me">linkedin.com/in/syednafizreja</a></li>
+      <li><span class="k">ResearchGate</span><a href={links.researchgate} rel="me">Syed Nafiz Reja Hasib</a></li>
+      <li><span class="k">Based in</span><span>{site.location}</span></li>
+      <li><span class="k">CV</span><span><a href="/cv/">Web version</a> · <a href={site.cv_pdf}>PDF</a></span></li>
+    </ul>
+  </div>
+</Base>

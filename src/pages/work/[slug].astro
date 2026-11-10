@@ -1,0 +1,136 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Figure from '../../components/Figure.astro';
+import ShellViewer from '../../components/ShellViewer.astro';
+import { METHOD_LABELS } from '../../lib/methods';
+import { STATUS_LABEL, doiUrl, site } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', (p) => !p.data.draft);
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project, all: projects } }));
+}
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  all: CollectionEntry<'projects'>[];
+}
+const { project, all } = Astro.props;
+const d = project.data;
+const { Content, headings } = await render(project);
+const related = d.related.map((id) => all.find((p) => p.id === id)).filter((p) => p !== undefined);
+const e = d.evidence;
+const repoTagUrl = e.repo && e.tag ? `${e.repo}/releases/tag/${e.tag}` : undefined;
+
+const toc = [
+  ...headings.filter((h) => h.depth === 2).map((h) => ({ slug: h.slug, text: h.text })),
+  { slug: 'evidence', text: 'Evidence' },
+  ...(related.length ? [{ slug: 'related', text: 'Related' }] : []),
+];
+
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: d.title,
+  abstract: d.summary,
+  author: { '@id': new URL('/#person', Astro.site).href },
+  dateCreated: d.sort_date.toISOString().slice(0, 10),
+  keywords: d.methods.map((m) => METHOD_LABELS[m]).join(', '),
+  ...(e.repo ? { codeRepository: e.repo } : {}),
+  ...(e.doi ? { identifier: doiUrl(e.doi) } : {}),
+  url: new URL(`/work/${project.id}/`, Astro.site).href,
+};
+---
+
+<Base title={d.short_title} description={d.summary} og={project.id} type="article" jsonLd={[ld]}>
+  <article class="wrap">
+    <header class="case-head">
+      <span class="n">{d.number}</span>
+      <h1>{d.title}</h1>
+      <p class="lede">{d.summary}</p>
+      <dl class="case-meta">
+        <div><dt>Year</dt><dd class="num">{d.year}</dd></div>
+        <div><dt>Status</dt><dd><span class={`status ${d.status}`}>{STATUS_LABEL[d.status]}</span></dd></div>
+        <div><dt>Methods</dt><dd>{d.methods.map((m) => METHOD_LABELS[m]).join(', ')}</dd></div>
+        <div><dt>Tools</dt><dd>{d.tools.join(', ')}</dd></div>
+      </dl>
+    </header>
+
+    {project.id === 'shellform' ? <ShellViewer /> : <Figure src={d.hero.src} alt={d.hero.alt} caption={d.hero.caption} label="Fig. 0" eager sizes="(min-width: 76rem) 76rem, 96vw" />}
+
+    {
+      d.key_numbers.length > 0 && (
+        <section aria-labelledby="numbers">
+          <h2 id="numbers" class="sr-only">Key numbers</h2>
+          <dl class="numbers">
+            {d.key_numbers.map((k) => (
+              <div>
+                <dt>{k.label}</dt>
+                <dd class="v">{k.value}{k.unit && <span class="u">{k.unit}</span>}</dd>
+                {k.basis && <dd class="b">{k.basis}</dd>}
+              </div>
+            ))}
+          </dl>
+          {d.numbers_note && <p class="numbers-note">{d.numbers_note}</p>}
+        </section>
+      )
+    }
+
+    <div class="case-body">
+      <div class="prose">
+        <Content />
+
+        <h2 id="evidence">Evidence</h2>
+        {
+          d.validation && (
+            <div class="panel">
+              <dl>
+                <dt>Benchmark</dt><dd>{d.validation.benchmark}</dd>
+                <dt>Metric</dt><dd>{d.validation.metric}</dd>
+                <dt>Result</dt><dd class="num">{d.validation.value}</dd>
+              </dl>
+            </div>
+          )
+        }
+        <div class="panel">
+          <dl>
+            {e.repo && (<><dt>Code</dt><dd><a href={e.repo}>{e.repo.replace('https://', '')}</a></dd></>)}
+            {e.tag && (<><dt>Release</dt><dd>{repoTagUrl ? <a href={repoTagUrl}>{e.tag}</a> : e.tag}</dd></>)}
+            {e.doi && (<><dt>DOI</dt><dd><a href={doiUrl(e.doi)}>{e.doi}</a></dd></>)}
+            {e.live && (<><dt>Live tool</dt><dd><a href={e.live}>Open the prototype</a></dd></>)}
+            {e.report && (<><dt>Report</dt><dd><a href={e.report}>Read the report</a></dd></>)}
+            {e.tests && (<><dt>Tests</dt><dd>{e.tests}</dd></>)}
+            {e.licence && (<><dt>Licence</dt><dd>{e.licence}</dd></>)}
+          </dl>
+        </div>
+        {project.id === 'shellform' && <Figure src={d.hero.src} alt={d.hero.alt} caption={d.hero.caption} />}
+        {d.gallery.map((g) => <Figure src={g.src} alt={g.alt} caption={g.caption} />)}
+
+        {
+          related.length > 0 && (
+            <>
+              <h2 id="related">Related</h2>
+              <div class="related">
+                {related.map((r) => (
+                  <a href={`/work/${r.id}/`}>
+                    <span class="n">{r.data.number}</span>
+                    <h3>{r.data.short_title}</h3>
+                    <p>{r.data.summary}</p>
+                  </a>
+                ))}
+              </div>
+            </>
+          )
+        }
+      </div>
+
+      <aside class="case-aside no-print" aria-label="On this page">
+        <h2>On this page</h2>
+        <ol>{toc.map((t) => <li><a href={`#${t.slug}`}>{t.text}</a></li>)}</ol>
+        <p class="mt-4"><a href="/work/">← All work</a></p>
+        <p class="mt-1 muted">Questions about this project: <a href="/contact/">contact {site.name.split(' ')[0]}</a>.</p>
+      </aside>
+    </div>
+  </article>
+</Base>
+

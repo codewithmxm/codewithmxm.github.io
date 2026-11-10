@@ -1,0 +1,80 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { toBibtex } from '../lib/bibtex';
+import { PUB_STATUS_LABEL, doiUrl, links } from '../lib/site';
+
+const pubs = (await getCollection('publications')).sort((a, b) => a.data.order - b.data.order);
+const groups = [
+  { type: 'journal', title: 'Peer-reviewed journal articles' },
+  { type: 'manuscript', title: 'Manuscripts under review and in preparation' },
+  { type: 'report', title: 'Technical reports and preprints' },
+] as const;
+const projects = await getCollection('projects');
+const projectTitle = (id?: string) => projects.find((p) => p.id === id)?.data.short_title;
+---
+
+<Base title="Publications" description="Peer-reviewed articles, manuscripts under review and in preparation, and technical reports, with DOIs and BibTeX." og="publications">
+  <header class="page-head wrap">
+    <span class="eyebrow">Publications</span>
+    <h1>Publications</h1>
+    <p class="lede">
+      Listed as in my CV. Statuses are as of November 2026. Full record on <a href={links.orcid}>ORCID</a> and
+      <a href={links.researchgate}>ResearchGate</a>.
+    </p>
+  </header>
+
+  <div class="wrap mt-5">
+    {
+      groups.map((g) => {
+        const items = pubs.filter((p) => p.data.type === g.type);
+        return items.length ? (
+          <section class="pub-group" aria-labelledby={`g-${g.type}`}>
+            <h2 id={`g-${g.type}`}>{g.title}</h2>
+            <ol class="pubs">
+              {items.map((p) => {
+                const d = p.data;
+                const bibId = `bib-${p.id}`;
+                return (
+                  <li class="pub">
+                    <span class="n">[{d.order}]</span>
+                    <div>
+                      <p class="t">{d.title}</p>
+                      <p class="a">
+                        {d.authors.map((a, i) => (
+                          <>
+                            {i > 0 && (i === d.authors.length - 1 ? ', & ' : ', ')}
+                            {i + 1 === d.owner_index ? <span class="me">{a}</span> : a}
+                          </>
+                        ))}
+                        {d.year && <> ({d.year}).</>}{' '}
+                        {d.type === 'journal' && (
+                          <span class="v">
+                            {d.venue}, {d.volume}
+                            {d.issue && <>({d.issue})</>}
+                            {d.pages && <>, {d.pages}</>}.
+                          </span>
+                        )}
+                      </p>
+                      <div class="row">
+                        <span class={`status ${d.status === 'published' ? 'complete' : 'in-progress'}`}>
+                          {PUB_STATUS_LABEL[d.status]}{d.status === 'under-review' && d.venue ? `, ${d.venue}` : ''}
+                        </span>
+                        {d.note && <span class="note">{d.note}</span>}
+                        {d.doi && <a href={doiUrl(d.doi)}>doi:{d.doi}</a>}
+                        {d.url && <a href={d.url}>Link</a>}
+                        {d.project && projectTitle(d.project) && <a href={`/work/${d.project}/`}>Project: {projectTitle(d.project)}</a>}
+                        <button class="copy-btn no-print" type="button" data-copy={bibId}>Copy BibTeX</button>
+                      </div>
+                      <pre id={bibId} hidden>{toBibtex(d, p.id)}</pre>
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
+          </section>
+        ) : null;
+      })
+    }
+  </div>
+</Base>

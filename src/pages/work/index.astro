@@ -1,0 +1,53 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import IndexRow from '../../components/IndexRow.astro';
+import { METHODS, METHOD_LABELS } from '../../lib/methods';
+
+const projects = (await getCollection('projects', (p) => !p.data.draft)).sort((a, b) => a.data.number.localeCompare(b.data.number));
+const used = METHODS.filter((m) => projects.some((p) => p.data.methods.includes(m)));
+---
+
+<Base title="Work" description="Numbered index of research and engineering projects: concrete shells, seismic design, embodied carbon, pavements and validation." og="work">
+  <header class="page-head wrap">
+    <span class="eyebrow">Index</span>
+    <h1>Work</h1>
+    <p class="lede">Each project states its question, how it was checked, what it found and what it does not show. Filter by method.</p>
+  </header>
+
+  <section class="wrap">
+    <nav class="filters" aria-label="Filter by method" data-filters>
+      <a href="/work/" data-method="" aria-current="true">All</a>
+      {used.map((m) => <a href={`/work/?method=${m}`} data-method={m}>{METHOD_LABELS[m]}</a>)}
+    </nav>
+    <p class="filter-count" aria-live="polite" data-count>{projects.length} projects</p>
+    <ol class="index mt-2" data-index>
+      {projects.map((p) => <IndexRow project={p} headingLevel="h2" />)}
+    </ol>
+  </section>
+</Base>
+
+<script>
+  const nav = document.querySelector<HTMLElement>('[data-filters]');
+  const rows = [...document.querySelectorAll<HTMLElement>('[data-index] > li')];
+  const count = document.querySelector<HTMLElement>('[data-count]');
+  const apply = (method: string) => {
+    let shown = 0;
+    rows.forEach((r) => {
+      const on = !method || (r.dataset.methods ?? '').split(' ').includes(method);
+      r.hidden = !on;
+      if (on) shown++;
+    });
+    nav?.querySelectorAll<HTMLAnchorElement>('a').forEach((a) => (a.dataset.method ?? '') === method ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current'));
+    if (count) count.textContent = `${shown} ${shown === 1 ? 'project' : 'projects'}`;
+  };
+  nav?.addEventListener('click', (e) => {
+    const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[data-method]');
+    if (!a) return;
+    e.preventDefault();
+    const m = a.dataset.method ?? '';
+    history.replaceState(null, '', m ? `?method=${m}` : location.pathname);
+    apply(m);
+  });
+  apply(new URLSearchParams(location.search).get('method') ?? '');
+</script>

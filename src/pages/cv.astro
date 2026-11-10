@@ -1,0 +1,208 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Email from '../components/Email.astro';
+import { site, links, PUB_STATUS_LABEL } from '../lib/site';
+
+const pubs = (await getCollection('publications')).sort((a, b) => a.data.order - b.data.order);
+const cite = (d: (typeof pubs)[number]['data']) => {
+  const authors = d.authors.length > 1 ? d.authors.slice(0, -1).join(', ') + ', & ' + d.authors.at(-1) : d.authors[0];
+  const year = d.year ? ` (${d.year}).` : '.';
+  return { authors, year };
+};
+---
+
+<Base title="CV" description={`Curriculum vitae of ${site.name}: education, research projects, publications, experience and skills.`} og="cv">
+  <header class="page-head wrap">
+    <span class="eyebrow no-print">Curriculum vitae</span>
+    <h1>{site.name}</h1>
+    <p class="lede">Civil engineer · computational structural design · low-carbon shell structures · seismic engineering. {site.location}.</p>
+    <p class="lede"><Email /> · ORCID <a href={links.orcid}>{site.orcid}</a> · <a href={links.github}>github.com/{site.github}</a></p>
+    <div class="cv-actions">
+      <a class="btn primary" href={site.cv_pdf} download>Download PDF</a>
+      <button class="btn" type="button" onclick="window.print()">Print</button>
+    </div>
+  </header>
+
+  <div class="wrap cv mt-4">
+    <section>
+      <h2>Profile</h2>
+      <div>
+        <p>
+          I design lightweight concrete shell structures that stay safe in earthquakes and use far less material and carbon, using computation and open,
+          tested code. My bachelor thesis was the full hand design of a four-storey reinforced concrete frame for a seismic site in Sichuan, to the Chinese
+          codes. I now run two open research projects that build on it: ShellBench and ShellForm. Before this I spent two and a half years as a project
+          engineer in precision manufacturing, running durability testing and root-cause analysis.
+        </p>
+        <p class="mt-2 muted">
+          Interests: computational form-finding and structural optimisation of shells; seismic design and its embodied-carbon consequences; validated,
+          reproducible structural software; machine-learning surrogates for structural design; lightweight structures for extreme environments.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Education</h2>
+      <div>
+        <div class="entry">
+          <div class="entry-head"><h3>BEng Civil Engineering (four-year programme)</h3><span class="when">2019–2023</span></div>
+          <p class="where">Southwest Petroleum University, School of Civil Engineering and Geomatics, Chengdu</p>
+          <ul>
+            <li>Weighted average 84.05/100 (GPA 3.41 on SWPU's 5.0 scale); full Chinese Government Scholarship.</li>
+            <li>
+              Thesis: structural design of a four-storey RC frame office building in Panzhihua, Sichuan (intensity 7, 0.10 g; GB 50009, 50010, 50011).
+              Member sizing, yield-line slab design, moment distribution, D-value lateral analysis, drift checks and capacity design. Grade 87/100.
+              <a href="/work/thesis-rc-frame/">Project page</a>.
+            </li>
+            <li>Selected courses: Structure Mechanics I (94), University Physics (94), Design Principles of Concrete Structures (89), Probability and Statistics (88).</li>
+          </ul>
+        </div>
+        <div class="entry">
+          <div class="entry-head"><h3>English and Chinese language programme</h3><span class="when">2018–2019</span></div>
+          <p class="where">Institute of Language, BRAC University, Dhaka</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Research projects</h2>
+      <div>
+        <div class="entry">
+          <div class="entry-head"><h3><a href="/work/shellbench/">ShellBench</a>: embodied carbon of thin-shell floors in seismic RC frames</h3><span class="when">2026–</span></div>
+          <p class="where">Lead researcher and developer · Python, OpenSeesPy, CalculiX · MIT licence</p>
+          <ul>
+            <li>Audited my thesis as the validation case: 16 input inconsistencies and 21 doubtful printed values logged, each with a recorded decision.</li>
+            <li>Rebuilt the thesis frame in OpenSeesPy under gravity, wind and earthquake, with GB 50010 member checks and automated tests on every change.</li>
+            <li>In progress: a design generator swept over storeys and ground acceleration, a shell-floor module checked against standard benchmarks, pre-registered hypotheses and an open dataset.</li>
+          </ul>
+        </div>
+        <div class="entry">
+          <div class="entry-head"><h3><a href="/work/shellform/">ShellForm</a>: the carbon cost of seismic resilience in form-found concrete shells</h3><span class="when">2026–</span></div>
+          <p class="where">Lead researcher and developer · Python, CalculiX, three.js · MIT licence</p>
+          <ul>
+            <li>Design study of 168 sized shells (two spans, two support types, three rise ratios, two strategies) over 0–0.6 g, with carbon under GB/T 51366 and ICE factors.</li>
+            <li>Pre-registered analysis plan, validation tests for the seismic form-finding code, and an interactive design explorer.</li>
+          </ul>
+        </div>
+        <div class="entry">
+          <div class="entry-head"><h3><a href="/work/canopy/">Parametric carbon optimisation of an aviation-terminal canopy</a></h3><span class="when">2026</span></div>
+          <p class="where">Independent computational design project · JavaScript, Python</p>
+          <ul><li>Interactive web prototype linking canopy geometry to simplified structural indicators and estimated embodied carbon. Not validated for engineering use.</li></ul>
+        </div>
+        <div class="entry">
+          <div class="entry-head"><h3>Nano-modified warm mix asphalt: durability model and life-cycle assessment</h3><span class="when">2025–2026</span></div>
+          <p class="where">Independent research, sole author · Python, LCA</p>
+          <ul>
+            <li><a href="/work/moisture-model/">Moisture-damage model</a> linking tensile strength ratio data to climate loading, with outputs mapped to BIM asset management.</li>
+            <li><a href="/work/pavecarbon/">Cradle-to-gate (A1–A3) comparison</a>: production GWP fell by 5.2% (61.31 to 58.15 kgCO₂e/t); a 15% longer service life lowered annualised GWP by 17.5%.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Publications</h2>
+      <div>
+        <ol class="cv-pubs">
+          {
+            pubs.map((p) => {
+              const d = p.data;
+              const { authors, year } = cite(d);
+              return (
+                <li value={d.order}>
+                  {authors}{year} {d.title}.{' '}
+                  {d.type === 'journal' ? (
+                    <em>{d.venue}, {d.volume}{d.issue && `(${d.issue})`}{d.pages && `, ${d.pages}`}.</em>
+                  ) : (
+                    <span class="muted">{PUB_STATUS_LABEL[d.status]}{d.status === 'under-review' && d.venue ? `, ${d.venue}` : ''}{d.note ? `. ${d.note}` : '.'}</span>
+                  )}
+                  {d.doi && <> <a href={`https://doi.org/${d.doi}`}>doi:{d.doi}</a></>}
+                </li>
+              );
+            })
+          }
+        </ol>
+        <p class="mt-2 no-print"><a href="/publications/">Publications with BibTeX</a></p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Experience</h2>
+      <div>
+        <div class="entry">
+          <div class="entry-head"><h3>Project engineer, precision manufacturing</h3><span class="when">2024–2026</span></div>
+          <p class="where">Guangdong, China</p>
+          <ul>
+            <li>Quality control on automated inspection and testing lines, including review of durability (fatigue) test results.</li>
+            <li>Investigated non-conformities and led root-cause analysis and corrective and preventive actions.</li>
+            <li>Reviewed technical drawings and tolerances and kept traceability records.</li>
+          </ul>
+        </div>
+        <div class="entry">
+          <div class="entry-head"><h3>Independent research collaborator</h3><span class="when">2024–</span></div>
+          <p class="where">Informal collaboration with a PhD researcher at Hohai University · remote</p>
+          <ul><li>Co-authored peer-reviewed reviews on BIM and on nano-additives in asphalt; wrote Python durability models and ran cradle-to-gate LCAs.</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Skills</h2>
+      <div>
+        <ul>
+          <li><strong>Structural engineering:</strong> hand design of RC frames to GB 50009, 50010, 50011 and 55002; gravity, wind and seismic analysis (base-shear method, response spectrum); capacity checks; shell form-finding (force density method).</li>
+          <li><strong>Computation:</strong> Python (NumPy, SciPy, Matplotlib, pytest), OpenSeesPy, CalculiX, Gmsh; Git and GitHub Actions; JavaScript web prototypes; LaTeX.</li>
+          <li><strong>Design and BIM:</strong> AutoCAD (advanced); Revit and BIM workflows (working knowledge).</li>
+          <li><strong>Sustainability:</strong> A1–A3 embodied-carbon and life-cycle assessment; GB/T 51366 and ICE carbon factors.</li>
+          <li><strong>Research practice:</strong> pre-registered analysis plans; validation against benchmarks and hand calculations; tagged, reproducible releases; AI-assisted coding with full human review and disclosed AI use.</li>
+          <li><strong>Quality engineering:</strong> inspection and test-line QC, fatigue-test review, root-cause analysis, CAPA, drawing and tolerance review.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Courses</h2>
+      <div>
+        <ul>
+          <li>Bayesian Statistics: From Concept to Data Analysis, UC Santa Cruz (Coursera), 2023.</li>
+          <li>AutoCAD for Design and Drafting, Autodesk certification preparation course (Coursera), 2023.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Languages</h2>
+      <p>Bengali (native); English (full professional; degree taught in English); Chinese (intermediate, about B1); Hindi (conversational); French (beginner).</p>
+    </section>
+
+    <section>
+      <h2>Service</h2>
+      <div>
+        <div class="entry">
+          <div class="entry-head"><h3>Senior ESL instructor and event coordinator, Foreign Language Corner</h3><span class="when">2019–2023</span></div>
+          <p class="where">Southwest Petroleum University, Chengdu</p>
+        </div>
+        <div class="entry">
+          <div class="entry-head"><h3>Member, Institution of Engineers, Bangladesh</h3><span class="when">2023–</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Awards</h2>
+      <p>Chinese Government Scholarship, full scholarship for the four-year bachelor's degree (2019–2023).</p>
+    </section>
+
+    <section>
+      <h2>References</h2>
+      <p>Available on request.</p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .cv-pubs { padding-left: 2.2em; }
+  .cv-pubs li { font-size: 0.95rem; }
+  .cv-pubs li + li { margin-top: 0.4rem; }
+  .cv-pubs a { word-break: break-all; }
+</style>

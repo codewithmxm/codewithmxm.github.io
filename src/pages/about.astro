@@ -1,0 +1,36 @@
+---
+import { getEntry, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Email from '../components/Email.astro';
+import { site, links } from '../lib/site';
+
+const entry = (await getEntry('pages', 'about'))!;
+const { Content } = await render(entry);
+---
+
+<Base title="About" description={entry.data.description} og="about" type="profile">
+  <header class="page-head wrap">
+    <span class="eyebrow">About</span>
+    <h1>{site.name}</h1>
+    <p class="lede">{site.job_title}. {site.location}.</p>
+  </header>
+
+  <div class="wrap section">
+    <div class="feature">
+      <div class="prose"><Content /></div>
+      <aside class="panel" aria-label="Facts">
+        <dl>
+          <dt>Now</dt><dd>{site.currently}</dd>
+          <dt>Education</dt><dd>BEng Civil Engineering, Southwest Petroleum University, Chengdu (2019–2023). Weighted average 84.05/100; full Chinese Government Scholarship.</dd>
+          <dt>Thesis</dt><dd>Four-storey RC frame for a seismic site, designed by hand to GB 50009, 50010 and 50011. Grade 87/100.</dd>
+          <dt>Experience</dt><dd>Project engineer, precision manufacturing, Guangdong (2024–2026). Independent research collaborator (2024–).</dd>
+          <dt>Languages</dt><dd>Bengali (native), English (full professional), Chinese (about B1), Hindi (conversational), French (beginner).</dd>
+          <dt>Membership</dt><dd>Institution of Engineers, Bangladesh (since 2023).</dd>
+          <dt>Contact</dt><dd><Email /></dd>
+          <dt>Profiles</dt><dd><a href={links.orcid}>ORCID</a> · <a href={links.github}>GitHub</a> · <a href={links.linkedin}>LinkedIn</a> · <a href={links.researchgate}>ResearchGate</a></dd>
+        </dl>
+        <p class="mt-3"><a class="btn" href="/cv/">Full CV</a></p>
+      </aside>
+    </div>
+  </div>
+</Base>
