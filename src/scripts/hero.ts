@@ -161,8 +161,8 @@ if (canvas && ctx) {
   };
   const stop = () => { if (raf) cancelAnimationFrame(raf); raf = 0; last = 0; };
 
-  resize();
-  draw();
+  // The observer fires once on observe(), which sizes the canvas and draws the still frame
+  // after first paint rather than during script evaluation.
   new ResizeObserver(() => { resize(); draw(); }).observe(canvas);
   new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) start(); else stop(); }).observe(canvas);
   document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));

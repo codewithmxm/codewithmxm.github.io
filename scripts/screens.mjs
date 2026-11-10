@@ -1,9 +1,10 @@
 // Screenshots for visual checks: THEMES=dark,light WIDTHS=1280,390 FULL=0|1 node scripts/screens.mjs <outdir> <paths...>
 // (on Git Bash, set MSYS_NO_PATHCONV=1 so "/" is not rewritten)
+// BASE=http://127.0.0.1:PORT reuses a preview that is already running.
 import { chromium } from 'playwright';
 import { serve } from './serve.mjs';
 const [out, ...paths] = process.argv.slice(2);
-const { base, stop } = await serve(4333);
+const { base, stop } = process.env.BASE ? { base: process.env.BASE, stop: () => {} } : await serve(4333);
 const browser = await chromium.launch();
 for (const theme of (process.env.THEMES ?? 'dark,light').split(',')) for (const w of (process.env.WIDTHS ?? '1280,390').split(',').map(Number)) {
   const ctx = await browser.newContext({ viewport: { width: w, height: 900 }, reducedMotion: 'reduce' });

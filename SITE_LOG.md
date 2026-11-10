@@ -16,14 +16,16 @@ The author asked for a more modern, technical look (reference sites: yasio.dev, 
 - Scroll reveal only for content below the first screen, only after the script runs, and never under reduced motion; print forces everything visible.
 - The print layer is kept, so the CV PDF is still black on white.
 - The status-dot pulse animates transform and opacity only, so it does not repaint on the main thread.
+- The background grid fades through a paper-coloured overlay rather than a CSS mask, and the header blur applies only on fine pointers (desktop); phones get a near-opaque bar. Both cut raster work, which was the cause of slow first renders in headless tests.
+- The hero canvas sizes and draws its still frame from a ResizeObserver, after first paint, not during script evaluation.
 
 ### Checks
 
 - `astro check`: 0 errors, 0 warnings, 0 hints. Build: 27 pages.
 - Playwright and axe (WCAG 2.1 A and AA), 10 pages in both themes, plus behaviour tests: all 27 pass. The axe tests now pick the theme through `localStorage`, the way a reader does.
-- Screenshots checked at 1280 and 390 px in both themes for the home, work, case-study, about, publications and CV pages.
+- Screenshots checked at 1280 and 390 px in both themes: full pages for home, work, ShellForm case study, about, publications and CV; first screen for home, research and contact after the performance changes.
 - CV PDF regenerated (3 pages); text search for the private strings returns nothing.
-- Lighthouse 12 (mobile, simulated), local preview: accessibility, best practices and SEO 100 on `/` and `/work/shellform/`. Performance 100 on `/work/shellform/`; on `/` it varied between 77 and 99 across runs on this machine (LCP 1.5 s, CLS 0); the variation comes from one unattributed long task during first render. Re-check on the live site.
+- Lighthouse 12 (mobile, simulated), local preview, which is noisy on this machine: accessibility, best practices and SEO 100 on `/` and `/work/shellform/`. Performance on `/` after the raster fixes: 77, 98, 98, 95 (median 96; the first run is a cold start). `/work/shellform/`: 100 on most runs, one run 76. The previous design scored 96 to 99 on the live site. Live numbers for the redesign are recorded below once deployed.
 
 ## 2026-11-10: first release
 
