@@ -65,3 +65,24 @@ if (toTop) {
     document.querySelector<HTMLElement>('.brand')?.focus({ preventScroll: true });
   });
 }
+
+// Scroll reveal. Only elements below the first screen are hidden, and only when motion is allowed,
+// so content never depends on this script.
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+  const sel = '.section-head, .feature, .index-row, .now > div, .stats, .pub, .cv section, figure.fig, .numbers, .panel, .related a, .cta-band, .contact-list';
+  const io = new IntersectionObserver(
+    (entries) => entries.forEach((e) => { if (e.isIntersecting) { (e.target as HTMLElement).dataset.reveal = 'in'; io.unobserve(e.target); } }),
+    { rootMargin: '0px 0px -8% 0px' },
+  );
+  const fold = innerHeight;
+  const seen = new Map<Element, number>();
+  document.querySelectorAll<HTMLElement>(sel).forEach((el) => {
+    if (el.getBoundingClientRect().top < fold) return;
+    const parent = el.parentElement!;
+    const i = seen.get(parent) ?? 0;
+    seen.set(parent, i + 1);
+    el.style.setProperty('--d', `${Math.min(i, 4) * 0.07}s`);
+    el.dataset.reveal = '';
+    io.observe(el);
+  });
+}

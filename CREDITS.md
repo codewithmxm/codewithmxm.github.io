@@ -18,9 +18,8 @@ The site costs nothing to run: GitHub Pages hosting, GitHub Actions builds, Page
 
 | Font | Designer | Licence |
 | --- | --- | --- |
-| Newsreader | Production Type | SIL Open Font License 1.1 |
-| Inter | Rasmus Andersson | SIL Open Font License 1.1 |
-| IBM Plex Mono | IBM, Mike Abbink, Bold Monday | SIL Open Font License 1.1 |
+| Geist (variable) | The Geist Project Authors (Vercel) | SIL Open Font License 1.1 |
+| Geist Mono (variable) | The Geist Project Authors (Vercel) | SIL Open Font License 1.1 |
 
 ## Content
 

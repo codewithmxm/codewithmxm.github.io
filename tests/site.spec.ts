@@ -7,7 +7,10 @@ for (const path of pages) {
   for (const scheme of ['light', 'dark'] as const) {
     test(`${path} has no WCAG A/AA violations (${scheme})`, async ({ page }) => {
       await page.emulateMedia({ colorScheme: scheme, reducedMotion: 'reduce' });
+      // the site ignores the OS scheme (dark by default), so pick the theme the way a reader does
+      await page.addInitScript((t) => localStorage.setItem('theme', t), scheme);
       await page.goto(path);
+      expect(await page.evaluate(() => document.documentElement.dataset.theme)).toBe(scheme);
       const r = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
       expect(r.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
     });

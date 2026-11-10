@@ -1,5 +1,30 @@
 # Site log
 
+## 2026-11-10: redesign
+
+The author asked for a more modern, technical look (reference sites: yasio.dev, swkang73.github.io, the CodersRank list of developer sites, and the Bespoke Careers architecture-portfolio advice). Content is unchanged apart from two whitespace fixes.
+
+### Decisions
+
+- Dark by default (near-black blue `#070a12`, cyan and violet accents). The OS colour scheme is ignored; a light theme stays one click away on the toggle and is remembered. Light is a cool grey-white, not cream.
+- Type: Geist and Geist Mono (variable, self-hosted through Fontsource). Newsreader, Inter and IBM Plex Mono are removed.
+- Home hero: the real ShellForm design cell (same JSON as the 3D viewer) drawn as a turning wireframe on a 2D canvas with a drawing title block (span, supports, rise/span, Sa, thickness, governing check). No three.js on load. The canvas is `aria-hidden`, capped at 1.5x pixel density, pauses off screen and in hidden tabs, starts 1.2 s after load, draws about 30 frames a second in six batched strokes, and shows one still frame under reduced motion. The heading stays the largest paint.
+- Numbers on the home page are only those already on the site: 168 shells, 79 of 84 pairs, the project count and the publication count.
+- Header: sticky glass bar with numbered navigation (01 to 05) and a Contact pill; on phones the navigation becomes a second row and fits five items at 390 px.
+- Projects are cards with a thumbnail on a light plate (figures are never inverted), status, tags and a gradient edge on hover.
+- Every page except Contact ends with a "Get in touch" band (email, CV, contact page).
+- Scroll reveal only for content below the first screen, only after the script runs, and never under reduced motion; print forces everything visible.
+- The print layer is kept, so the CV PDF is still black on white.
+- The status-dot pulse animates transform and opacity only, so it does not repaint on the main thread.
+
+### Checks
+
+- `astro check`: 0 errors, 0 warnings, 0 hints. Build: 27 pages.
+- Playwright and axe (WCAG 2.1 A and AA), 10 pages in both themes, plus behaviour tests: all 27 pass. The axe tests now pick the theme through `localStorage`, the way a reader does.
+- Screenshots checked at 1280 and 390 px in both themes for the home, work, case-study, about, publications and CV pages.
+- CV PDF regenerated (3 pages); text search for the private strings returns nothing.
+- Lighthouse 12 (mobile, simulated), local preview: accessibility, best practices and SEO 100 on `/` and `/work/shellform/`. Performance 100 on `/work/shellform/`; on `/` it varied between 77 and 99 across runs on this machine (LCP 1.5 s, CLS 0); the variation comes from one unattributed long task during first render. Re-check on the live site.
+
 ## 2026-11-10: first release
 
 Built from the plan in `16_Personal_Website_Plan_and_Master_Prompt.md`.
