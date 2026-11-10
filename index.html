@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MKW-3DS — Play Mario Kart Wii on Your 3DS | Windows &amp; Mac CIA Builder</title>
+<meta name="description" content="MKW-3DS is a native port of Mario Kart Wii for the Nintendo 3DS, continued from dudewhat's original project. Build a CIA file from your own game disc on Windows or Mac with a simple, beginner-friendly app.">
+<meta name="keywords" content="MKW-3DS, Mario Kart Wii 3DS, Mario Kart Wii port, 3DS homebrew, CIA builder, Mario Kart Wii CIA, 3DS native port, dudewhat, MKW 3DS download">
+<meta name="robots" content="index, follow">
+<meta name="author" content="codewithmxm">
+<link rel="canonical" href="https://github.com/codewithmxm/MKW-3DS">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MKW-3DS">
+<meta property="og:title" content="MKW-3DS — Play Mario Kart Wii on Your 3DS">
+<meta property="og:description" content="A native port of Mario Kart Wii for the Nintendo 3DS. Build a CIA from your own disc on Windows or Mac, then install it on your console.">
+<meta property="og:url" content="https://github.com/codewithmxm/MKW-3DS/releases">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MKW-3DS — Play Mario Kart Wii on Your 3DS">
+<meta name="twitter:description" content="A native port of Mario Kart Wii for the Nintendo 3DS. Build a CIA from your own disc with a simple Windows or Mac app.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "MKW-3DS",
+  "operatingSystem": "Windows, macOS",
+  "applicationCategory": "UtilitiesApplication",
+  "description": "Mario Kart Wii for 3DS: a native port continued from dudewhat's original. Builds a CIA from your own disc on Mac and Windows.",
+  "url": "https://github.com/codewithmxm/MKW-3DS",
+  "downloadUrl": "https://github.com/codewithmxm/MKW-3DS/releases",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #f2f6fb;
+    color: #1f2937;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 40px 22px 90px; }
+  h1 {
+    font-size: 2.2rem;
+    line-height: 1.25;
+    letter-spacing: -0.6px;
+    color: #0f172a;
+    margin: 10px 0 18px;
+  }
+  h2 {
+    font-size: 1.42rem;
+    line-height: 1.3;
+    color: #0f172a;
+    margin: 52px 0 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e3eaf4;
+  }
+  h3 { font-size: 1.08rem; color: #0f172a; margin: 26px 0 8px; }
+  p { margin: 0 0 17px; }
+  a { color: #2563eb; text-decoration: underline; }
+  a:hover { color: #1d4ed8; }
+  ul, ol { margin: 0 0 18px; padding-left: 24px; }
+  li { margin-bottom: 11px; }
+  strong { color: #0f172a; }
+  .hero {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 30px 28px 34px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  .hero p { font-size: 1.06rem; color: #374151; margin-bottom: 26px; }
+  .btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff4d6d 0%, #ff9f43 100%);
+    color: #ffffff !important;
+    font-size: 1.16rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    text-decoration: none;
+    padding: 19px 38px;
+    border-radius: 15px;
+    box-shadow: 0 12px 26px rgba(255, 77, 109, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 16px 32px rgba(255, 77, 109, 0.42); }
+  .btn-note { display: block; margin-top: 14px; font-size: 0.9rem; color: #64748b; }
+  .card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px 26px 8px;
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.07);
+    margin: 26px 0;
+  }
+  .steps { counter-reset: step; list-style: none; padding-left: 0; }
+  .steps li {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 18px 22px 18px 60px;
+    margin-bottom: 14px;
+    box-shadow: 0 5px 16px rgba(15, 23, 42, 0.07);
+    position: relative;
+  }
+  .steps li::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute;
+    left: 18px;
+    top: 17px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff4d6d, #ff9f43);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    line-height: 28px;
+    text-align: center;
+  }
+  .faq-q { font-weight: 700; color: #0f172a; margin: 22px 0 6px; }
+  .faq-a { margin: 0 0 18px; }
+  .divider { height: 1px; background: #e3eaf4; border: 0; margin: 34px 0; }
+  @media (max-width: 620px) {
+    body { font-size: 16px; }
+    h1 { font-size: 1.62rem; }
+    h2 { font-size: 1.24rem; margin-top: 40px; }
+    .wrap { padding: 26px 16px 70px; }
+    .hero { padding: 24px 18px 28px; }
+    .btn { display: block; width: 100%; padding: 18px 12px; font-size: 1.05rem; }
+    .card { padding: 20px 18px 6px; }
+    .steps li { padding: 16px 18px 16px 54px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <h1>🏁 MKW-3DS - Play Mario Kart Wii on 3DS</h1>
+    <p>A native port of Mario Kart Wii built for the Nintendo 3DS, continued from dudewhat's original project. It turns your own game disc into a ready-to-install file using a simple app for Windows and Mac — no programming skills required.</p>
+    <a class="btn" href="https://github.com/codewithmxm/MKW-3DS/releases">⬇️ Get MKW-3DS Now</a>
+    <span class="btn-note">Direct link to the official releases page</span>
+  </div>
+
+  <h2>🏁 What Is MKW-3DS?</h2>
+  <p>MKW-3DS is a fan-made project that brings Mario Kart Wii to the Nintendo 3DS as a native port. Instead of streaming the game from a PC or using an emulator, the finished file runs directly on the console itself, using the 3DS hardware.</p>
+  <p>The project is a continuation of dudewhat's original work, picked up and carried forward so that the port keeps improving. Alongside the port itself, the project includes a small desktop application that does the complicated part for you: it reads your own Mario Kart Wii disc and packages the game into a CIA file — the format your 3DS uses to install software.</p>
+  <p>If that sounds technical, it really isn't. You open the app, point it at your game, and click a button. The app handles all of the file conversion in the background and hands you a single finished file at the end.</p>
+
+  <h2>How It Works</h2>
+  <div class="card">
+    <ol class="steps">
+      <li><strong>You supply the game.</strong> You use your own Mario Kart Wii disc or a disc image made from your own copy. The project does not include any game data.</li>
+      <li><strong>The app builds your file.</strong> The MKW-3DS builder on your Windows or Mac computer reads the game data and packages it into a single CIA file.</li>
+      <li><strong>You install it on your 3DS.</strong> Copy the finished file to your console's SD card and install it like any other homebrew application.</li>
+    </ol>
+  </div>
+  <p>That's the whole process. Three steps, one app, one file. Most of the waiting happens in step two, where your computer does the packaging work.</p>
+
+  <h2>📦 What You Need Before You Start</h2>
+  <p>Before downloading, take a couple of minutes to check that you have everything on this list. Gathering it all first makes the whole process much smoother.</p>
+  <ul>
+    <li><strong>A Windows computer.</strong> Windows 10 or Windows 11 is recommended. The builder app also runs on Mac, but this guide walks through the Windows steps.</li>
+    <li><strong>Your own Mario Kart Wii disc.</strong> You need the physical disc, or a disc image created from your own disc. The builder cannot create the game out of nothing.</li>
+    <li><strong>A disc drive.</strong> If you are using a physical disc, your computer needs a way to read it — either a built-in drive or an external USB disc drive.</li>
+    <li><strong>A Nintendo 3DS with homebrew support.</strong> Your console needs to be set up to run homebrew software and install custom files. If you have already installed homebrew apps on your 3DS before, you are ready.</li>
+    <li><strong>An SD card and a card reader.</strong> You will copy the finished file onto the SD card your 3DS uses, so a way to plug that card into your computer helps a lot.</li>
+    <li><strong>Free disk space.</strong> Set aside roughly 2 GB of free space on your computer so the builder has room to work and store the finished file.</li>
+    <li><strong>A stable internet connection.</strong> You only need it to download the app, but a steady connection avoids interrupted downloads.</li>
+  </ul>
+
+  <h2>⬇️ Download &amp; Setup</h2>
+  <p>Everything you need lives on the official releases page. Visit this link to download the application:</p>
+  <p><a href="https://github.com/codewithmxm/MKW-3DS/releases">https://github.com/codewithmxm/MKW-3DS/releases</a></p>
+  <p>On that page you will see a list of releases. The newest one is always at the top, and that is the one you want — it contains the latest fixes and improvements to the port and to the builder app.</p>
+  <div class="card">
+    <ol class="steps">
+      <li><strong>Open the releases page</strong> using the link above. It opens in your normal web browser, on any computer.</li>
+      <li><strong>Find the newest release</strong> at the top of the list. It is usually labelled as the latest version.</li>
+      <li><strong>Download the release</strong> by clicking it and saving it somewhere easy to find, such as your Downloads folder.</li>
+      <li><strong>Keep the page open</strong> while<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MKW-3DS - Play Mario Kart Wii on 3DS | Download for Windows &amp; Mac</title>
+<meta name="description" content="MKW-3DS is a native port of Mario Kart Wii for the Nintendo 3DS, continued from dudewhat's original project. Build a CIA from your own disc on Windows or Mac using the official releases page.">
+<meta name="keywords" content="MKW-3DS, Mario Kart Wii 3DS, Mario Kart Wii port, 3DS native port, Mario Kart Wii CIA, MKW 3DS download, dudewhat, 3DS homebrew">
+<meta name="robots" content="index, follow">
+<meta name="author" content="codewithmxm">
+<link rel="canonical" href="https://github.com/codewithmxm/MKW-3DS">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MKW-3DS">
+<meta property="og:title" content="MKW-3DS - Play Mario Kart Wii on 3DS">
+<meta property="og:description" content="A native port of Mario Kart Wii for the Nintendo 3DS. Build a CIA from your own disc on Windows or Mac.">
+<meta property="og:url" content="https://github.com/codewithmxm/MKW-3DS/releases">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MKW-3DS - Play Mario Kart Wii on 3DS">
+<meta name="twitter:description" content="A native port of Mario Kart Wii for the Nintendo 3DS. Build a CIA from your own disc on Windows or Mac.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "MKW-3DS",
+  "operatingSystem": "Windows, macOS",
+  "applicationCategory": "UtilitiesApplication",
+  "description": "Mario Kart Wii for 3DS: a native port continued from dudewhat's original. Builds a CIA from your own disc on Mac and Windows.",
+  "url": "https://github.com/codewithmxm/MKW-3DS",
+  "downloadUrl": "https://github.com/codewithmxm/MKW-3DS/releases",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #f2f6fb;
+    color: #1f2937;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 40px 22px 90px; }
+  h1 {
+    font-size: 2.2rem;
+    line-height: 1.25;
+    letter-spacing: -0.6px;
+    color: #0f172a;
+    margin: 10px 0 18px;
+  }
+  h2 {
+    font-size: 1.42rem;
+    line-height: 1.3;
+    color: #0f172a;
+    margin: 52px 0 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e3eaf4;
+  }
+  h3 { font-size: 1.08rem; color: #0f172a; margin: 26px 0 8px; }
+  p { margin: 0 0 17px; }
+  a { color: #2563eb; text-decoration: underline; }
+  a:hover { color: #1d4ed8; }
+  ul, ol { margin: 0 0 18px; padding-left: 24px; }
+  li { margin-bottom: 11px; }
+  strong { color: #0f172a; }
+  .hero {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 30px 28px 34px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  .hero p { font-size: 1.06rem; color: #374151; margin-bottom: 26px; }
+  .btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff4d6d 0%, #ff9f43 100%);
+    color: #ffffff !important;
+    font-size: 1.16rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    text-decoration: none;
+    padding: 19px 38px;
+    border-radius: 15px;
+    box-shadow: 0 12px 26px rgba(255, 77, 109, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 16px 32px rgba(255, 77, 109, 0.42); }
+  .btn-note { display: block; margin-top: 14px; font-size: 0.9rem; color: #64748b; }
+  .card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px 26px 8px;
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.07);
+    margin: 26px 0;
+  }
+  .steps { counter-reset: step; list-style: none; padding-left: 0; }
+  .steps li {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 18px 22px 18px 60px;
+    margin-bottom: 14px;
+    box-shadow: 0 5px 16px rgba(15, 23, 42, 0.07);
+    position: relative;
+  }
+  .steps li::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute;
+    left: 18px;
+    top: 17px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff4d6d, #ff9f43);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    line-height: 28px;
+    text-align: center;
+  }
+  .faq-q { font-weight: 700; color: #0f172a; margin: 22px 0 6px; }
+  .faq-a { margin: 0 0 18px; }
+  @media (max-width: 620px) {
+    body { font-size: 16px; }
+    h1 { font-size: 1.62rem; }
+    h2 { font-size: 1.24rem; margin-top: 40px; }
+    .wrap { padding: 26px 16px 70px; }
+    .hero { padding: 24px 18px 28px; }
+    .btn { display: block; width: 100%; padding: 18px 12px; font-size: 1.05rem; }
+    .card { padding: 20px 18px 6px; }
+    .steps li { padding: 16px 18px 16px 54px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <h1>🏁 MKW-3DS - Play Mario Kart Wii on 3DS</h1>
+    <p>A native port of Mario Kart Wii built for the Nintendo 3DS, continued from dudewhat's original project. It turns your own game disc into a ready-to-use file with a simple desktop app for Windows and Mac.</p>
+    <a class="btn" href="https://github.com/codewithmxm/MKW-3DS/releases" style="text-decoration: none;">⬇️ Download MKW-3DS</a>
+    <span class="btn-note">Official releases page</span>
+  </div>
+
+  <h2>🏁 What Is MKW-3DS?</h2>
+  <p>MKW-3DS is a fan-made project that brings Mario Kart Wii to the Nintendo 3DS as a native port. The finished game runs directly on the console hardware instead of relying on a PC emulator or a streaming setup. It is a continuation of dudewhat's original work, carried forward so the port keeps improving over time.</p>
+  <p>The project includes a desktop application for<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MKW-3DS - Play Mario Kart Wii on 3DS | Download for Windows &amp; Mac</title>
+<meta name="description" content="MKW-3DS is a native port of Mario Kart Wii for the Nintendo 3DS, continued from dudewhat's original project. Build a CIA from your own disc on Windows or Mac using the official releases page.">
+<meta name="keywords" content="MKW-3DS, Mario Kart Wii 3DS, Mario Kart Wii port, 3DS native port, Mario Kart Wii CIA, MKW 3DS download, dudewhat, 3DS homebrew">
+<meta name="robots" content="index, follow">
+<meta name="author" content="codewithmxm">
+<link rel="canonical" href="https://github.com/codewithmxm/MKW-3DS">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MKW-3DS">
+<meta property="og:title" content="MKW-3DS - Play Mario Kart Wii on 3DS">
+<meta property="og:description" content="A native port of Mario Kart Wii for the Nintendo 3DS. Build a CIA from your own disc on Windows or Mac.">
+<meta property="og:url" content="https://github.com/codewithmxm/MKW-3DS/releases">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MKW-3DS - Play Mario Kart Wii on 3DS">
+<meta name="twitter:description" content="A native port of Mario Kart Wii for the Nintendo 3DS. Build a CIA from your own disc on Windows or Mac.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "MKW-3DS",
+  "operatingSystem": "Windows, macOS",
+  "applicationCategory": "UtilitiesApplication",
+  "description": "Mario Kart Wii for 3DS: a native port continued from dudewhat's original. Builds a CIA from your own disc on Mac and Windows.",
+  "url": "https://github.com/codewithmxm/MKW-3DS",
+  "downloadUrl": "https://github.com/codewithmxm/MKW-3DS/releases",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #f2f6fb;
+    color: #1f2937;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 40px 22px 90px; }
+  h1 {
+    font-size: 2.2rem;
+    line-height: 1.25;
+    letter-spacing: -0.6px;
+    color: #0f172a;
+    margin: 10px 0 18px;
+  }
+  h2 {
+    font-size: 1.42rem;
+    line-height: 1.3;
+    color: #0f172a;
+    margin: 52px 0 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e3eaf4;
+  }
+  h3 { font-size: 1.08rem; color: #0f172a; margin: 26px 0 8px; }
+  p { margin: 0 0 17px; }
+  a { color: #2563eb; text-decoration: underline; }
+  a:hover { color: #1d4ed8; }
+  ul, ol { margin: 0 0 18px; padding-left: 24px; }
+  li { margin-bottom: 11px; }
+  strong { color: #0f172a; }
+  .hero {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 30px 28px 34px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  .hero p { font-size: 1.06rem; color: #374151; margin-bottom: 26px; }
+  .btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff4d6d 0%, #ff9f43 100%);
+    color: #ffffff !important;
+    font-size: 1.16rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    text-decoration: none;
+    padding: 19px 38px;
+    border-radius: 15px;
+    box-shadow: 0 12px 26px rgba(255, 77, 109, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 16px 32px rgba(255, 77, 109, 0.42); }
+  .btn-note { display: block; margin-top: 14px; font-size: 0.9rem; color: #64748b; }
+  .card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px 26px 8px;
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.07);
+    margin: 26px 0;
+  }
+  .steps { counter-reset: step; list-style: none; padding-left: 0; }
+  .steps li {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 18px 22px 18px 60px;
+    margin-bottom: 14px;
+    box-shadow: 0 5px 16px rgba(15, 23, 42, 0.07);
+    position: relative;
+  }
+  .steps li::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute;
+    left: 18px;
+    top: 17px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff4d6d, #ff9f43);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    line-height: 28px;
+    text-align: center;
+  }
+  .faq-q { font-weight: 700; color: #0f172a; margin: 22px 0 6px; }
+  .faq-a { margin: 0 0 18px; }
+  @media (max-width: 620px) {
+    body { font-size: 16px; }
+    h1 { font-size: 1.62rem; }
+    h2 { font-size: 1.24rem; margin-top: 40px; }
+    .wrap { padding: 26px 16px 70px; }
+    .hero { padding: 24px 18px 28px; }
+    .btn { display: block; width: 100%; padding: 18px 12px; font-size: 1.05rem; }
+    .card { padding: 20px 18px 6px; }
+    .steps li { padding: 16px 18px 16px 54px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <h1>🏁 MKW-3DS - Play Mario Kart Wii on 3DS</h1>
+    <p>A native port of Mario Kart Wii built for the Nintendo 3DS, continued from dudewhat's original project. It turns your own game disc into a ready-to-use file with a simple desktop app for Windows and Mac.</p>
+    <a class="btn" href="https://github.com/codewithmxm/MKW-3DS/releases" style="text-decoration: none;">⬇️ Download MKW-3DS</a>
+    <span class="btn-note">Official releases page</span>
+  </div>
+
+  <h2>🏁 What Is MKW-3DS?</h2>
+  <p>MKW-3DS is a fan-made project that brings Mario Kart Wii to the Nintendo 3DS as a native port. The finished game runs directly on the console hardware instead of relying on a PC emulator or a streaming setup. It is a continuation of dudewhat's original work, carried forward so the port keeps improving over time.</p>
+  <p>The project includes a desktop application for Windows and Mac. That app reads your own Mario Kart Wii disc and packages the game into a CIA file, which is the file type your 3DS uses to install software. The app does the complicated conversion steps for you, so you do not need to understand programming or file formats.</p>
+  <p>You open the app, point it at your own game disc, and let it build the file. When it finishes, you copy the finished CIA to your 3DS SD card and install it on the console. The whole process is designed for everyday computer users, not developers.</p>
+
+  <h2>🎮 Why Use the 3DS Port?</h2>
+  <p>The appeal of MKW-3DS is simple: it lets you play Mario Kart Wii on a handheld console that was never designed to run it. The port is built specifically for the 3DS hardware, so it feels closer to a native game than a workaround. You get the familiar tracks, characters, and racing style of Mario Kart Wii in a portable form.</p>
+  <p>The desktop builder also keeps the process tidy. Rather than asking you to deal with multiple tools or manual file edits, it produces one CIA file from your own disc. That single file is what you move to the console. The project continues dudewhat's original port, which means the work has a foundation and an ongoing direction rather than starting from scratch.</p>
+
+  <h2>📋 What You Need Before You Start</h2>
+  <p>Gather these items before you download the app. Having everything ready makes the process much smoother and avoids interruptions while the builder is working.</p>
+  <ul>
+    <li><strong>A Windows computer.</strong> The steps in this guide use Windows as the example. The app is also made for Mac, according to the project description.</li>
+    <li><strong>Your own Mario Kart Wii disc.</strong> The builder needs your own game disc to create the CIA file. It does not create the game from nothing.</li>
+    <li><strong>A way to connect your console's SD card.</strong> You will move the finished CIA file to the SD card that your 3DS uses, so a card reader or another way to transfer files is helpful.</li>
+    <li><strong>A Nintendo 3DS.</strong> The finished CIA file is installed on the console itself. Your 3DS needs to be set up to install homebrew software beforeHere is a complete, SEO-optimized HTML page for the MKW-3DS end-user guide, built entirely with inline CSS and a clean, professional layout.
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MKW-3DS - Play Mario Kart Wii on Your 3DS | Windows &amp; Mac Download</title>
+<meta name="description" content="MKW-3DS is a native port of Mario Kart Wii for the Nintendo 3DS, continued from dudewhat's original project. Build a CIA file from your own disc on Windows or Mac with a simple desktop app.">
+<meta name="keywords" content="MKW-3DS, Mario Kart Wii 3DS, Mario Kart Wii port, 3DS native port, Mario Kart Wii CIA, MKW 3DS download, dudewhat, 3DS homebrew">
+<meta name="robots" content="index, follow">
+<meta name="author" content="codewithmxm">
+<link rel="canonical" href="https://github.com/codewithmxm/MKW-3DS">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MKW-3DS">
+<meta property="og:title" content="MKW-3DS - Play Mario Kart Wii on Your 3DS">
+<meta property="og:description" content="A native port of Mario Kart Wii for the Nintendo 3DS. Build a CIA file from your own disc on Windows or Mac.">
+<meta property="og:url" content="https://github.com/codewithmxm/MKW-3DS/releases">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MKW-3DS - Play Mario Kart Wii on Your 3DS">
+<meta name="twitter:description" content="A native port of Mario Kart Wii for the Nintendo 3DS. Build a CIA file from your own disc on Windows or Mac.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "MKW-3DS",
+  "operatingSystem": "Windows, macOS",
+  "applicationCategory": "UtilitiesApplication",
+  "description": "Mario Kart Wii for 3DS: a native port continued from dudewhat's original. Builds a CIA from your own disc on Mac and Windows.",
+  "url": "https://github.com/codewithmxm/MKW-3DS",
+  "downloadUrl": "https://github.com/codewithmxm/MKW-3DS/releases",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #f1f5fb;
+    color: #1f2937;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 42px 22px 90px; }
+  h1 { font-size: 2.2rem; line-height: 1.22; letter-spacing: -0.6px; color: #0f172a; margin: 8px 0 16px; }
+  h2 { font-size: 1.4rem; line-height: 1.3; color: #0f172a; margin: 50px 0 14px; padding-bottom: 10px; border-bottom: 2px solid #e2e9f4; }
+  h3 { font-size: 1.05rem; color: #0f172a; margin: 24px 0 6px; }
+  p { margin: 0 0 16px; }
+  a { color: #2563eb; }
+  a:hover { color: #1d4ed8; }
+  ul, ol { margin: 0 0 18px; padding-left: 24px; }
+  li { margin-bottom: 10px; }
+  strong { color: #0f172a; }
+  .hero {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 32px 28px 34px;
+    box-shadow: 0 12px 34px rgba(15, 23, 42, 0.09);
+    text-align: center;
+  }
+  .hero p { font-size: 1.06rem; color: #374151; margin-bottom: 26px; }
+  .btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff4d6d 0%, #ff9f43 100%);
+    color: #ffffff !important;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    text-decoration: none;
+    padding: 19px 40px;
+    border-radius: 15px;
+    box-shadow: 0 12px 26px rgba(255, 77, 109, 0.34);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 16px 32px rgba(255, 77, 109, 0.42); }
+  .btn-note { display: block; margin-top: 14px; font-size: 0.9rem; color: #64748b; }
+  .card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px 26px 10px;
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.07);
+    margin: 26px 0;
+  }
+  .steps { counter-reset: step; list-style: none; padding-left: 0; margin: 0; }
+  .steps li {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 18px 22px 18px 62px;
+    margin-bottom: 14px;
+    box-shadow: 0 5px 16px rgba(15, 23, 42, 0.07);
+    position: relative;
+  }
+  .steps li::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute;
+    left: 18px;
+    top: 17px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff4d6d, #ff9f43);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    line-height: 28px;
+    text-align: center;
+  }
+  .faq-q { font-weight: 700; color: #0f172a; margin: 22px 0 6px; }
+  .faq-a { margin: 0 0 18px; }
+  .link-box {
+    background: #eef4ff;
+    border: 1px solid #d7e3fb;
+    border-radius: 14px;
+    padding: 18px 22px;
+    margin: 22px 0;
+    word-break: break-word;
+  }
+  @media (max-width: 620px) {
+    body { font-size: 16px; }
+    h1 { font-size: 1.6rem; }
+    h2 { font-size: 1.22rem; margin-top: 40px; }
+    .wrap { padding: 26px 16px 70px; }
+    .hero { padding: 24px 18px 28px; }
+    .btn { display: block; width: 100%; padding: 18px 12px; font-size: 1.04rem; }
+    .card { padding: 20px 18px 8px; }
+    .steps li { padding: 16px 18px 16px 54px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <h1>🏁 MKW-3DS - Play Mario Kart Wii on 3DS</h1>
+    <p>A native port of Mario Kart Wii for the Nintendo 3DS, continued from dudewhat's original project. It turns your own game disc into a ready-to-install file using a simple desktop app for Windows and Mac.</p>
+    <a class="btn" href="https://github.com/codewithmxm/MKW-3DS/releases">⬇️ Download MKW-3DS</a>
+    <span class="btn-note">Official releases page</span>
+  </div>
+
+  <h2>🏁 What Is MKW-3DS?</h2>
+  <p>MKW-3DS is a fan-made project that brings Mario Kart Wii to the Nintendo 3DS as a native port. The finished game runs directly on the console itself rather than on a computer, so you play it the same way you play any other title on your handheld. It picks up where dudewhat's original port left off and continues the work.</p>
+  <p>The project also includes a desktop application for Windows and Mac. That app reads your own Mario Kart Wii disc and packages the game into a CIA file — the file format your 3DS uses to install software. The app handles all of the conversion work in the background, so you never have to touch a command line, a script, or a settings file.</p>
+  <p>In practice, the whole thing works like this: you open the app, point it at your own game disc, and click build. The app produces one finished file, and you copy that file to your console's SD card. Everything else is handled for you. If you can download a file and copy it to a folder, you can use this project.</p>
+
+  <h2>🎮 Why Play Mario Kart Wii on a 3DS?</h2>
+  <p>The appeal is straightforward. Mario Kart Wii was built for a home console, and MKW-3DS puts that same racing experience in your hands on a handheld. Because the port is native, the game is running on the 3DS hardware itself rather than being streamed from a PC over a network. That makes it feel closer to a real 3DS game and less like a workaround.</p>
+  <p>You get the tracks, characters, and item-driven racing you already know, in a form you can carry with you. The desktop builder keeps the setup side equally simple: instead of juggling several tools or editing files by hand, you get one clean CIA file at the end of a single build.</p>
+  <p>Because the project continues dudewhat's original port rather than starting over, it builds on an existing foundation. Updates to the releases page typically bring improvements to both the builder app and the port itself.</p>
+
+  <h2>📋 What You Need Before You Start</h2>
+  <p>Gather these items before downloading. Having everything ready means you can move from download to first race without stopping to hunt for a cable or a disc.</p>
+  <ul>
+    <li><strong>A Windows computer.</strong> Windows 10 or Windows 11 works well. The builder app is also made for Mac, so either type of computer can be used.</li>
+    <li><strong>Your own Mario Kart Wii disc.</strong> The builder needs your own disc or an image made from your own disc. It cannot create the game from nothing.</li>
+    <li><strong>A disc drive.</strong> If you are using a physical disc, your computer needs something that can read it — a built-in drive or an external USB drive both work.</li>
+    <li><strong>A Nintendo 3DS with homebrew support.</strong> Your console needs to be prepared to install homebrew software before you can install the finished CIA file.</li>
+    <li><strong>An SD card and a way to read it.</strong> You will copy the finished file onto the SD card your 3DS uses, so a card reader or card slot on your computer is genuinely useful.</li>
+    <li><strong>Free disk space.</strong> Set aside roughly 2 GB of free space so the builder has room to work and store the finished file.</li>
+    <li><strong>A stable internet connection.</strong> You only need it to reach the releases page and download the app, but a steady connection avoids a half-finished download.</li>
+    <li><strong>A little patience.</strong> Building the file takes a few minutes depending on your computer. Let the app finish without closing the window.</li>
+  </ul>
+
+  <h2>⬇️ Download &amp; Setup</h2>
+  <p>All official builds live on the project's releases page. Visit this link to download the application:</p>
+  <div class="link-box">
+    <a href="https://github.com/codewithmxm/MKW-3DS/releases">https://github.com/codewithmxm/MKW-3DS/releases</a>
+  </div>
+  <p>That page lists every release, with the newest at the top. Always take the newest one — it contains the latest fixes for both the builder and the port. Older releases stay listed for reference, but you do not need them.</p>
+
+  <h3>Getting the right file</h3>
+  <p>On the releases page, find the release at the top of the list. Open it and look for the download section, which sits below the release notes. Save the release to a folder you can find again easily, such as your Downloads folder. If your browser asks whether to keep the file, confirm that you want to keep it.</p>
+
+  <h2>🛠️ Building Your CIA File</h2>
+  <ol class="steps">
+    <li><strong>Open the builder app.</strong> Once the download has finished, open the application you saved. If Windows shows a security prompt asking whether to run it, confirm that you want to run it so the setup can continue.</li>
+    <li><strong>Insert your game disc.</strong> Put your Mario Kart Wii disc into your computer's disc drive and wait for the drive to finish reading it. If you use an external drive, plug it in first and give it a few seconds to appear.</li>
+    <li><strong>Point the app at your game.</strong> In the builder app, choose your disc drive or browse to the game data. The app needs to know where your copy of the game is stored.</li>
+    <li><strong>Choose where the file should go.</strong> Pick an output folder you will remember, such as a new folder on your desktop. This is where your finished CIA file will appear.</li>
+    <li><strong>Start the build.</strong> Press the build button and let the app work. A progress bar or status message will show how far along it is. This stage usually takes several minutes.</li>
+    <li><strong>Wait for it to finish.</strong> Do not close the window or unplug the drive while it is running. When the app reports that it is done, you will have a single CIA file in your output folder.</li>
+  </ol>
+
+  <h2>📥 Installing on Your 3DS</h2>
+  <ol class="steps">
+    <li><strong>Copy the file to your SD card.</strong> Remove the SD card from your 3DS, plug it into your computer, and copy the finished CIA file into a folder you can find again — a folder named cias on the root of the card is a good habit.</li>
+    <li><strong>Put the SD card back.</strong> Eject the card safely from your computer, then put it back into your console and power the console on.</li>
+    <li><strong>Open your installer.</strong> Launch the CIA installer you normally use on your 3DS homebrew setup.</li>
+    <li><strong>Find and install the file.</strong> Navigate to the folder where you placed the CIA file, select it, and confirm the installation. Give it a moment to complete.</li>
+    <li><strong>Launch the game.</strong> Once installation finishes, return to your home menu and start MKW-3DS like any other title on your system.</li>
+  </ol>
+
+  <h2>💡 Tips for a Smooth First Race</h2>
+  <ul>
+    <li><strong>Use the newest release.</strong> If a build fails or the game misbehaves, check the releases page first. Newer builds often resolve exactly the issue you are seeing.</li>
+    <li><strong>Close other programs while building.</strong> The builder uses your computer's processor and disk. Giving it a clear run makes the build faster and less likely to stall.</li>
+    <li><strong>Keep your file names simple.</strong> Avoid unusual characters or very long names for folders and files. Simple names copy across more reliably to the SD card.</li>
+    <li><strong>Copy the whole file.</strong> Interrupted copies cause install errors. Let the copy finish fully before removing the SD card.</li>
+    <li><strong>Test one thing at a time.</strong> If something does not work, change one step at a time so you can tell what fixed it.</li>
+  </ul>
+
+  <h2>🔧 Troubleshooting</h2>
+  <p class="faq-q">The app does not see my disc.</p>
+  <p class="faq-a">Confirm the disc is seated fully and that the drive finishes reading before you open the app. If you use an external drive, try a different USB port and wait a few seconds for the drive to appear in your file explorer.</p>
+  <p class="faq-q">The build stops partway through.</p>
+  <p class="faq-a">Check that you have enough free disk space and that the disc has not been removed. Close other heavy programs, then start the build again. Using the newest release also helps.</p>
+  <p class="faq-q">The install fails on my console.</p>
+  <p class="faq-a">Delete the partial copy on your SD card, copy the CIA file across again, and retry the install. A clean copy resolves most failed installations.</p>
+  <p class="faq-q">Where do updates appear?</p>
+  <p class="faq-a">On the releases page linked above. Bookmark it so you can check back for newer builds without searching.</p>
+
+  <h2>❓ Frequently Asked Questions</h2>
+  <p class="faq-q">Is MKW-3DS the same as an emulator?</p>
+  <p class="faq-a">No. An emulator recreates console hardware in software on another machine. MKW-3DS is a native port, meaning the game runs on the 3DS itself once installed.</p>
+  <p class="faq-q">Do I need programming knowledge?</p>
+  <p class="faq-a">None at all. The desktop app handles the conversion, and you follow a short series of clicks. Any step that sounds technical is done for you.</p>
+  <p class="faq-q">Does the project include the game?</p>
+  <p class="faq-a">No. You supply your own copy of Mario Kart Wii, and the builder packages that copy into a CIA file for your console.</p>
+  <p class="faq-q">Does it work on Mac?</p>
+  <p class="faq-a">Yes. The builder app is made for Mac and Windows. The build steps are the same, though the menu names look slightly different.</p>
+  <p class="faq-q">How long does the build take?</p>
+  <p class="faq-a">Usually a few minutes. Faster computers finish sooner. Plan for it in one sitting rather than closing the window midway.</p>
+  <p class="faq-q">Can I go back to an older version?</p>
+  <p class="faq-a">Yes. Older releases stay listed on the releases page, so you can download an earlier build if a newer one causes trouble.</p>
+
+  <h2>🔗 Get MKW-3DS</h2>
+  <p>Visit this link to download the application and start building your file:</p>
+  <div class="link-box">
+    <a href="https://github.com/codewithmxm/MKW-3DS/releases">https://github.com/codewithmxm/MKW-3DS/releases</a>
+  </div>
+  <p>Download the newest release, build the CIA file from your own disc, copy it to your SD card, and install it on your console. From there, the race is in your hands.</p>
+
+</div>
+</body>
+</html>
