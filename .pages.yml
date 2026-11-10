@@ -1,0 +1,155 @@
+# Pages CMS (https://pagescms.org) dashboard for this site. Every save is a commit; the deploy workflow rebuilds the site.
+media:
+  input: src/assets/media
+  output: ../../assets/media
+
+content:
+  - name: projects
+    label: Projects
+    type: collection
+    path: src/content/projects
+    filename: "{fields.short_title}.mdx"
+    format: yaml-frontmatter
+    view:
+      fields: [number, title, status, year]
+      primary: title
+      sort: [number]
+    fields:
+      - { name: number, label: "Number (three digits, e.g. 007)", type: string, required: true, pattern: "^\d{3}$" }
+      - { name: title, label: Title, type: string, required: true }
+      - { name: short_title, label: Short title, type: string, required: true }
+      - { name: year, label: "Year (e.g. 2026 or 2026–)", type: string, required: true }
+      - { name: sort_date, label: Sort date, type: date, required: true }
+      - name: status
+        label: Status
+        type: select
+        options: { values: [in-progress, complete, archived] }
+      - { name: summary, label: "Summary (max 300 characters)", type: text, required: true }
+      - name: methods
+        label: Methods
+        type: select
+        list: true
+        options:
+          values: [form-finding, seismic-analysis, embodied-carbon, finite-element, optimisation, validation, life-cycle-assessment, machine-learning, hand-calculation, interactive-tools, durability-modelling]
+      - { name: tools, label: Tools, type: string, list: true }
+      - name: hero
+        label: Hero image
+        type: object
+        fields:
+          - { name: src, label: Image, type: image }
+          - { name: alt, label: "Alt text (describe what the figure shows)", type: string }
+          - { name: caption, label: Caption, type: text }
+      - name: gallery
+        label: Gallery
+        type: object
+        list: true
+        fields:
+          - { name: src, label: Image, type: image }
+          - { name: alt, label: Alt text, type: string }
+          - { name: caption, label: Caption, type: text }
+      - name: key_numbers
+        label: Key numbers (only numbers from the repo or paper)
+        type: object
+        list: true
+        fields:
+          - { name: label, label: Label, type: string }
+          - { name: value, label: Value, type: string }
+          - { name: unit, label: Unit, type: string }
+          - { name: basis, label: Basis or source, type: string }
+      - { name: numbers_note, label: Note under the numbers, type: text }
+      - name: validation
+        label: Validation
+        type: object
+        fields:
+          - { name: benchmark, label: Benchmark, type: string }
+          - { name: metric, label: Metric, type: string }
+          - { name: value, label: Value, type: string }
+      - name: evidence
+        label: Evidence
+        type: object
+        fields:
+          - { name: repo, label: Repository URL, type: string }
+          - { name: tag, label: Release tag, type: string }
+          - { name: doi, label: "DOI (without https://doi.org/)", type: string }
+          - { name: report, label: Report URL, type: string }
+          - { name: live, label: Live tool URL, type: string }
+          - { name: tests, label: Tests, type: string }
+          - { name: licence, label: Licence, type: string }
+      - { name: related, label: "Related projects (file names without .mdx)", type: string, list: true }
+      - { name: draft, label: Draft (hidden from the site), type: boolean, default: false }
+      - { name: body, label: "Case study (Question, Approach, Validation, Results, What this does not show)", type: rich-text }
+
+  - name: publications
+    label: Publications
+    type: collection
+    path: src/content/publications
+    format: yaml
+    view:
+      fields: [order, title, status]
+      primary: title
+      sort: [order]
+    fields:
+      - { name: order, label: "Order (number in the list)", type: number }
+      - { name: title, label: Title, type: string, required: true }
+      - { name: authors, label: "Authors (e.g. Hasib, S. N. R.)", type: string, list: true }
+      - { name: owner_index, label: "Your position in the author list (1 = first)", type: number }
+      - name: type
+        label: Type
+        type: select
+        options: { values: [journal, manuscript, report] }
+      - name: status
+        label: Status
+        type: select
+        options: { values: [published, under-review, in-preparation, preprint] }
+      - { name: venue, label: Journal or venue, type: string }
+      - { name: year, label: Year, type: number }
+      - { name: volume, label: Volume, type: string }
+      - { name: issue, label: Issue, type: string }
+      - { name: pages, label: Pages, type: string }
+      - { name: doi, label: "DOI (without https://doi.org/)", type: string }
+      - { name: url, label: URL, type: string }
+      - { name: note, label: Note, type: string }
+      - { name: project, label: "Linked project (file name without .mdx)", type: string }
+
+  - name: about
+    label: About page
+    type: file
+    path: src/content/pages/about.mdx
+    format: yaml-frontmatter
+    fields:
+      - { name: title, label: Title, type: string }
+      - { name: description, label: Description, type: text }
+      - { name: body, label: Text, type: rich-text }
+
+  - name: research
+    label: Research statement
+    type: file
+    path: src/content/pages/research.mdx
+    format: yaml-frontmatter
+    fields:
+      - { name: title, label: Title, type: string }
+      - { name: description, label: Description, type: text }
+      - { name: body, label: Text, type: rich-text }
+
+  - name: site
+    label: Site settings
+    type: file
+    path: src/data/site.json
+    format: json
+    fields:
+      - { name: name, label: Name, type: string }
+      - { name: short_name, label: Short name, type: string }
+      - { name: job_title, label: Job title, type: string }
+      - { name: identity, label: One-line identity, type: text }
+      - { name: bio, label: Short bio, type: text }
+      - { name: currently, label: "Now line", type: string }
+      - { name: location, label: "Location (region only, never a street address)", type: string }
+      - { name: email_user, label: "Email user (before the @)", type: string }
+      - { name: email_domain, label: Email domain, type: string }
+      - { name: orcid, label: ORCID iD, type: string }
+      - { name: github, label: GitHub username, type: string }
+      - { name: linkedin, label: LinkedIn URL, type: string }
+      - { name: researchgate, label: ResearchGate URL, type: string }
+      - { name: cv_pdf, label: CV PDF path, type: string }
+      - { name: featured, label: "Featured projects on the home page (file names)", type: string, list: true }
+      - { name: accent, label: Accent, type: string }
