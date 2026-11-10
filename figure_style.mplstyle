@@ -1,0 +1,26 @@
+# Matplotlib style that matches the site (paper background, ink lines, oxide accent).
+# Use: plt.style.use("figure_style.mplstyle"); save PNG at 200 dpi, at least 1600 px wide.
+figure.facecolor: f4f0e6
+axes.facecolor: f4f0e6
+savefig.facecolor: f4f0e6
+savefig.dpi: 200
+savefig.bbox: tight
+figure.figsize: 8, 5
+font.family: sans-serif
+font.sans-serif: Inter, Helvetica, Arial, DejaVu Sans
+font.size: 10
+axes.edgecolor: 1c1a16
+axes.labelcolor: 1c1a16
+axes.linewidth: 0.8
+axes.spines.top: False
+axes.spines.right: False
+axes.grid: True
+grid.color: d9d2c3
+grid.linewidth: 0.6
+xtick.color: 4d483f
+ytick.color: 4d483f
+text.color: 1c1a16
+axes.prop_cycle: cycler('color', ['a3401f', '1c1a16', '3b6e8f', '8a7f6a', '6b8f3b', 'c58b2b'])
+lines.linewidth: 1.6
+legend.frameon: False
+image.cmap: RdBu_r
